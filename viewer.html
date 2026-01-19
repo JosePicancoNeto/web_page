@@ -1,0 +1,1053 @@
+<!doctype html>
+<html lang="en" translate="no" class="notranslate">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+  <meta name="google" content="notranslate" />
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22%3E%3Ctext y=%22.9em%22 font-size=%2290%22%3E%F0%9F%A7%8A%3C/text%3E%3C/svg%3E">
+  <title>Heliroma — IFC 3D Viewer</title>
+
+  <script type="importmap">
+  {
+    "imports": {
+      "three": "https://cdn.jsdelivr.net/npm/three@0.152.2/build/three.module.js",
+      "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.152.2/examples/jsm/",
+      "web-ifc": "https://cdn.jsdelivr.net/npm/web-ifc@0.0.74/web-ifc-api.js",
+      "three/examples/jsm/": "https://cdn.jsdelivr.net/npm/three@0.152.2/examples/jsm/",
+      "three/examples/jsm/utils/BufferGeometryUtils": "https://cdn.jsdelivr.net/npm/three@0.152.2/examples/jsm/utils/BufferGeometryUtils.js",
+      "three/examples/jsm/controls/OrbitControls": "https://cdn.jsdelivr.net/npm/three@0.152.2/examples/jsm/controls/OrbitControls.js",
+      "three/examples/jsm/renderers/CSS2DRenderer": "https://cdn.jsdelivr.net/npm/three@0.152.2/examples/jsm/renderers/CSS2DRenderer.js"
+    }
+  }
+  </script>
+
+  <style>
+    :root{
+      --page-bg:#ffffff;
+      --text:#0f172a;
+      --muted:#475569;
+      --accent:#16a34a;
+      --border:rgba(15,23,42,.12);
+      --radius:14px;
+      --shadow: 0 12px 30px rgba(0,0,0,.10);
+      --header-bg: linear-gradient(180deg, rgba(15,23,42,.05), rgba(15,23,42,0));
+    }
+
+    *{box-sizing:border-box;}
+
+    html,body{
+      height:100%;
+      margin:0;
+      background:var(--page-bg);
+      color:var(--text);
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial;
+      overscroll-behavior: none;
+    }
+
+    #app{
+      height:100vh;
+      height:100dvh;
+      display:grid;
+      grid-template-rows:auto 1fr;
+    }
+
+    header{
+      position:sticky;
+      top:0;
+      z-index:50;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+      padding:10px 12px;
+      padding-top: calc(10px + env(safe-area-inset-top));
+      border-bottom:1px solid var(--border);
+      background: var(--header-bg);
+      backdrop-filter: blur(10px);
+    }
+
+    .brand{
+      display:flex;
+      align-items:center;
+      gap:10px;
+      min-width: 0;
+    }
+    .dot{
+      width:10px; height:10px; border-radius:999px;
+      background:var(--accent);
+      box-shadow:0 0 0 6px rgba(22,163,74,.15);
+      flex:0 0 auto;
+    }
+    .brandText{min-width:0;}
+    .title{
+      font-weight:800;
+      white-space:nowrap;
+      overflow:hidden;
+      text-overflow:ellipsis;
+      max-width: min(64vw, 520px);
+    }
+    .sub{
+      color:var(--muted);
+      font-size:12px;
+      white-space:nowrap;
+      overflow:hidden;
+      text-overflow:ellipsis;
+      max-width: min(64vw, 520px);
+    }
+
+    .actionsWrap{
+      display:flex;
+      align-items:center;
+      gap:10px;
+      flex: 0 0 auto;
+    }
+
+    .actions{
+      display:flex;
+      align-items:center;
+      gap:8px;
+      flex-wrap:wrap;
+      justify-content:flex-end;
+    }
+
+    button{
+      appearance:none;
+      border:1px solid var(--border);
+      background:rgba(15,23,42,.04);
+      color:var(--text);
+      padding:9px 12px;
+      border-radius:12px;
+      cursor:pointer;
+      font-weight:700;
+      font-size:13px;
+      line-height:1;
+      min-height:40px;
+      min-width:40px;
+    }
+    button.primary{background:rgba(22,163,74,.14); border-color:rgba(22,163,74,.28);}
+    button:disabled{opacity:.55; cursor:not-allowed;}
+
+    .pill{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      padding:6px 10px;
+      border-radius:999px;
+      border:1px solid var(--border);
+      background:rgba(15,23,42,.03);
+      color:var(--muted);
+      font-size:12px;
+      min-height:40px;
+    }
+
+    input[type="file"]{display:none;}
+
+    .bgctl, .gridctl{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      padding:4px 10px;
+      border-radius:999px;
+      border:1px solid var(--border);
+      background:rgba(15,23,42,.03);
+      color:var(--muted);
+      font-size:12px;
+      min-height:40px;
+    }
+    .bgctl label{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      cursor:pointer;
+    }
+    .bgctl input[type="color"]{
+      width:30px; height:26px;
+      padding:0;
+      border:1px solid var(--border);
+      border-radius:8px;
+      background:transparent;
+      cursor:pointer;
+    }
+    .bgctl .preset, .gridctl .preset{
+      padding:7px 10px;
+      border-radius:999px;
+      border:1px solid var(--border);
+      background:rgba(255,255,255,.75);
+      color:var(--text);
+      font-weight:700;
+      font-size:12px;
+      cursor:pointer;
+      min-height:32px;
+    }
+    .bgctl .preset:hover, .gridctl .preset:hover{background:rgba(255,255,255,.95);}
+
+    #viewer{position:relative; height:100%;}
+    canvas{display:block; width:100%; height:100%; touch-action:none;}
+
+    .toast{
+      position:absolute; top:12px; left:50%; transform:translateX(-50%);
+      min-width: min(720px, calc(100vw - 24px));
+      padding:10px 12px;
+      border-radius: var(--radius);
+      border:1px solid rgba(15,23,42,.12);
+      background: rgba(185,28,28,.92);
+      color:#fff;
+      display:none;
+      box-shadow: 0 12px 30px rgba(0,0,0,.20);
+      font-size:13px;
+      z-index:10;
+    }
+    .toast.show{display:block;}
+
+    .help{
+      position:absolute;
+      left:14px; bottom:14px;
+      max-width:520px;
+      padding:12px 12px;
+      border:1px solid var(--border);
+      background: rgba(255,255,255,.82);
+      backdrop-filter: blur(10px);
+      border-radius: var(--radius);
+      color:var(--muted);
+      font-size:12px;
+      box-shadow: var(--shadow);
+    }
+    .help b{color:var(--text);}
+    .helpRow{display:flex; align-items:flex-start; justify-content:space-between; gap:10px;}
+    .helpClose{
+      border:1px solid var(--border);
+      background:rgba(15,23,42,.04);
+      border-radius:10px;
+      padding:6px 10px;
+      min-height:32px;
+      min-width:32px;
+      font-weight:800;
+    }
+
+    .menuBtn{display:none;}
+    .miniBtn{display:none;}
+
+    #toolbarPanel{
+      display:none;
+      width:100%;
+      border-top:1px solid var(--border);
+      padding-top:10px;
+    }
+
+    @media (max-width: 920px){
+      .title, .sub{max-width: min(60vw, 420px);}
+    }
+
+    @media (max-width: 720px){
+      header{
+        flex-direction:column;
+        align-items:stretch;
+        gap:10px;
+        padding-left:12px;
+        padding-right:12px;
+        padding-bottom:12px;
+      }
+
+      .brand{
+        width:100%;
+        justify-content:space-between;
+      }
+
+      .brandLeft{
+        display:flex;
+        align-items:center;
+        gap:10px;
+        min-width:0;
+      }
+
+      .title, .sub{max-width: 66vw;}
+
+      .actionsWrap{
+        width:100%;
+        justify-content:flex-end;
+      }
+
+      .menuBtn{display:inline-flex;}
+      .miniBtn{display:inline-flex;}
+
+      .actions{display:none;}
+      #toolbarPanel{display:block;}
+      #toolbarPanel[hidden]{display:none;}
+
+      .toolbarGrid{
+        display:flex;
+        flex-direction:column;
+        gap:10px;
+      }
+      .toolbarRow{
+        display:flex;
+        gap:8px;
+        flex-wrap:wrap;
+        align-items:center;
+      }
+      .pill{flex:1 1 auto; justify-content:center;}
+
+      .help{
+        left:10px; right:10px;
+        bottom:10px;
+        max-width:none;
+      }
+    }
+
+    @media (max-width: 420px){
+      .title{max-width: 62vw;}
+      .sub{display:none;}
+      .bgctl, .gridctl{width:100%; justify-content:space-between;}
+      .toolbarRow > label, .toolbarRow > button{flex: 1 1 auto;}
+      .bgctl .preset, .gridctl .preset{min-height:36px;}
+    }
+  </style>
+</head>
+<body>
+  <div id="app">
+    <header>
+      <div class="brand">
+        <div class="brandLeft">
+          <span class="dot" aria-hidden="true"></span>
+          <div class="brandText">
+            <div class="title">Heliroma — IFC 3D Viewer</div>
+            <div class="sub">Rotate / Zoom / Pan • Default model auto-load</div>
+          </div>
+        </div>
+
+        <div class="actionsWrap">
+          <span id="statusMini" class="pill miniBtn" title="Status">Starting…</span>
+          <button id="btnHelp" class="miniBtn" type="button" title="Show/Hide help">Help</button>
+          <button id="btnMenu" class="menuBtn" type="button" title="Show/Hide tools">Tools</button>
+        </div>
+      </div>
+
+      <!-- Desktop toolbar -->
+      <div class="actions" id="actionsDesktop">
+        <span id="status" class="pill">Starting…</span>
+
+        <span class="bgctl" title="Viewer background color">
+          <label for="bgColor">
+            Background
+            <input id="bgColor" type="color" value="#ffffff" aria-label="Viewer background color" />
+          </label>
+          <button class="preset" id="bgWhite" type="button">White</button>
+          <button class="preset" id="bgDark" type="button">Dark</button>
+        </span>
+
+        <span class="gridctl" title="Grid options">
+          Grid
+          <button class="preset" id="gridToggle" type="button">On</button>
+          <button class="preset" id="gridMode" type="button">Finite</button>
+        </span>
+
+        <span class="gridctl" title="Quality options" style="gap:10px;">
+          Quality
+          <select id="qualitySelect" style="height:32px;border-radius:999px;border:1px solid var(--border);padding:0 10px;background:rgba(255,255,255,.75);font-weight:700;">
+            <option value="low">Low</option>
+            <option value="medium">Medium</option>
+            <option value="high" selected>High</option>
+            <option value="ultra">Ultra</option>
+          </select>
+
+          <label style="display:inline-flex;align-items:center;gap:6px;cursor:pointer;font-weight:800;color:var(--text);">
+            <input id="smoothShading" type="checkbox" style="width:16px;height:16px;" />
+            Smooth
+          </label>
+        </span>
+
+        <label>
+          <input id="fileInput" type="file" accept=".ifc" />
+          <button id="btnLoad" class="primary" type="button">Load IFC</button>
+        </label>
+        <button id="btnFit" type="button">Fit</button>
+        <button id="btnReset" type="button">Reset</button>
+        <button id="btnClear" type="button">Clear</button>
+      </div>
+
+      <!-- Mobile toolbar panel -->
+      <div id="toolbarPanel" hidden>
+        <div class="toolbarGrid">
+          <div class="toolbarRow">
+            <span id="statusMobile" class="pill" style="flex:1 1 auto;">Starting…</span>
+          </div>
+
+          <div class="toolbarRow">
+            <span class="bgctl" style="width:100%;" title="Viewer background color">
+              <label for="bgColorMobile">
+                Background
+                <input id="bgColorMobile" type="color" value="#ffffff" aria-label="Viewer background color" />
+              </label>
+              <button class="preset" id="bgWhiteMobile" type="button">White</button>
+              <button class="preset" id="bgDarkMobile" type="button">Dark</button>
+            </span>
+          </div>
+
+          <div class="toolbarRow">
+            <span class="gridctl" style="width:100%;" title="Grid options">
+              Grid
+              <button class="preset" id="gridToggleMobile" type="button">On</button>
+              <button class="preset" id="gridModeMobile" type="button">Finite</button>
+            </span>
+          </div>
+
+          <div class="toolbarRow">
+            <span class="gridctl" style="width:100%; justify-content:space-between;" title="Quality options">
+              <span style="font-weight:800;color:var(--text);">Quality</span>
+              <select id="qualitySelectMobile" style="height:36px;border-radius:999px;border:1px solid var(--border);padding:0 10px;background:rgba(255,255,255,.75);font-weight:700;flex:1 1 auto;max-width:180px;">
+                <option value="low">Low</option>
+                <option value="medium">Medium</option>
+                <option value="high" selected>High</option>
+                <option value="ultra">Ultra</option>
+              </select>
+              <label style="display:inline-flex;align-items:center;gap:8px;cursor:pointer;font-weight:800;color:var(--text);">
+                <input id="smoothShadingMobile" type="checkbox" style="width:18px;height:18px;" />
+                Smooth
+              </label>
+            </span>
+          </div>
+
+          <div class="toolbarRow">
+            <label style="flex:1 1 auto;">
+              <input id="fileInputMobile" type="file" accept=".ifc" />
+              <button id="btnLoadMobile" class="primary" type="button" style="width:100%;">Load IFC</button>
+            </label>
+            <button id="btnFitMobile" type="button" style="flex:1 1 auto;">Fit</button>
+            <button id="btnResetMobile" type="button" style="flex:1 1 auto;">Reset</button>
+            <button id="btnClearMobile" type="button" style="flex:1 1 auto;">Clear</button>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <div id="viewer">
+      <div id="toast" class="toast"></div>
+      <canvas id="canvas"></canvas>
+
+      <div id="helpCard" class="help">
+        <div class="helpRow">
+          <div>
+            <b>Controls</b><br/>
+            • Drag = rotate • Scroll/pinch = zoom • Right-drag (or 2-finger) = pan<br/>
+            <span id="defaultInfo"></span><br/>
+            <span><b>Grid</b>: On/Off and Finite/Infinite.</span><br/>
+            <span><b>Quality</b>: High/Ultra may reduce FPS on weak GPUs.</span>
+          </div>
+          <button id="helpClose" class="helpClose" type="button" title="Hide help">×</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script type="module">
+    import * as THREE from "three";
+    import { OrbitControls } from "three/addons/controls/OrbitControls.js";
+    import { IFCLoader } from "https://cdn.jsdelivr.net/npm/web-ifc-three@0.0.126/IFCLoader.js";
+
+    // Postprocessing (anti-aliasing)
+    import { EffectComposer } from "three/addons/postprocessing/EffectComposer.js";
+    import { RenderPass } from "three/addons/postprocessing/RenderPass.js";
+    import { ShaderPass } from "three/addons/postprocessing/ShaderPass.js";
+    import { FXAAShader } from "three/addons/shaders/FXAAShader.js";
+
+    const DEFAULT_IFC_URL = "./Projeto_Objeto3D_Chat.ifc";
+    const WEB_IFC_WASM_PATH = "https://cdn.jsdelivr.net/npm/web-ifc@0.0.72/";
+    const FALLBACK_GREEN_HEX = 0x70ad85;
+
+    const BG_STORAGE_KEY = "heliroma_viewer_bg";
+    const DEFAULT_BG_HEX = "#ffffff";
+    const DARK_BG_HEX = "#0b1220";
+
+    const GRID_VISIBLE_KEY = "heliroma_grid_visible";
+    const GRID_MODE_KEY = "heliroma_grid_mode"; // "finite" | "infinite"
+
+    const TOOLS_OPEN_KEY = "heliroma_tools_open";
+    const HELP_VISIBLE_KEY = "heliroma_help_visible";
+
+    const el = {
+      canvas: document.getElementById("canvas"),
+      viewer: document.getElementById("viewer"),
+      toast: document.getElementById("toast"),
+
+      // Desktop toolbar
+      status: document.getElementById("status"),
+      bgColor: document.getElementById("bgColor"),
+      bgWhite: document.getElementById("bgWhite"),
+      bgDark: document.getElementById("bgDark"),
+      gridToggle: document.getElementById("gridToggle"),
+      gridMode: document.getElementById("gridMode"),
+      fileInput: document.getElementById("fileInput"),
+      btnLoad: document.getElementById("btnLoad"),
+      btnFit: document.getElementById("btnFit"),
+      btnReset: document.getElementById("btnReset"),
+      btnClear: document.getElementById("btnClear"),
+
+      // Mobile header
+      statusMini: document.getElementById("statusMini"),
+      btnMenu: document.getElementById("btnMenu"),
+      btnHelp: document.getElementById("btnHelp"),
+      toolbarPanel: document.getElementById("toolbarPanel"),
+
+      // Mobile panel
+      statusMobile: document.getElementById("statusMobile"),
+      bgColorMobile: document.getElementById("bgColorMobile"),
+      bgWhiteMobile: document.getElementById("bgWhiteMobile"),
+      bgDarkMobile: document.getElementById("bgDarkMobile"),
+      gridToggleMobile: document.getElementById("gridToggleMobile"),
+      gridModeMobile: document.getElementById("gridModeMobile"),
+
+      // Quality
+      qualitySelect: document.getElementById("qualitySelect"),
+      smoothShading: document.getElementById("smoothShading"),
+      qualitySelectMobile: document.getElementById("qualitySelectMobile"),
+      smoothShadingMobile: document.getElementById("smoothShadingMobile"),
+
+      fileInputMobile: document.getElementById("fileInputMobile"),
+      btnLoadMobile: document.getElementById("btnLoadMobile"),
+      btnFitMobile: document.getElementById("btnFitMobile"),
+      btnResetMobile: document.getElementById("btnResetMobile"),
+      btnClearMobile: document.getElementById("btnClearMobile"),
+
+      // Help
+      helpCard: document.getElementById("helpCard"),
+      helpClose: document.getElementById("helpClose"),
+      defaultInfo: document.getElementById("defaultInfo")
+    };
+
+    let scene, camera, renderer, controls;
+    let ifcLoader;
+    let currentModel = null;
+    let currentURL = null;
+
+    let finiteGrid = null;
+    let infiniteGrid = null;
+    let gridVisible = true;
+    let gridMode = "finite";
+
+    // Postprocessing / Quality
+    let composer = null;
+    let renderPass = null;
+    let fxaaPass = null;
+
+    let qualityLevel = "high";
+    let smoothEnabled = false;
+
+    const QUALITY_KEY = "heliroma_quality";
+    const SMOOTH_KEY = "heliroma_smooth";
+
+    let currentPixelRatio = 1;
+
+    function showError(message, err){
+      console.error(message, err);
+      el.toast.textContent = message + (err ? ` (${err?.message || err})` : "");
+      el.toast.classList.add("show");
+      setStatus("Error", false);
+    }
+
+    function clearError(){
+      el.toast.classList.remove("show");
+    }
+
+    function setStatus(text, ok=true){
+      const apply = (node) => {
+        if (!node) return;
+        node.textContent = text;
+        node.style.borderColor = ok ? "rgba(22,163,74,.35)" : "rgba(15,23,42,.12)";
+        node.style.color = ok ? "#166534" : "#991b1b";
+        node.style.background = ok ? "rgba(22,163,74,.10)" : "rgba(185,28,28,.10)";
+      };
+      apply(el.status);
+      apply(el.statusMini);
+      apply(el.statusMobile);
+    }
+
+    function setToolsOpen(open){
+      const isOpen = !!open;
+      el.toolbarPanel.hidden = !isOpen;
+      if (el.btnMenu) el.btnMenu.textContent = isOpen ? "Close" : "Tools";
+      try{ localStorage.setItem(TOOLS_OPEN_KEY, isOpen ? "1" : "0"); }catch(_){}
+      requestAnimationFrame(() => resize());
+    }
+
+    function setHelpVisible(visible){
+      const v = !!visible;
+      el.helpCard.style.display = v ? "block" : "none";
+      if (el.btnHelp) el.btnHelp.textContent = v ? "Hide" : "Help";
+      try{ localStorage.setItem(HELP_VISIBLE_KEY, v ? "1" : "0"); }catch(_){}
+    }
+
+    function isMobileLike(){
+      return matchMedia("(max-width: 720px)").matches;
+    }
+
+    function qualityToScale(level){
+      // Conservative caps on mobile to avoid GPU overload
+      const mobile = isMobileLike();
+      switch(level){
+        case "low": return 0.75;
+        case "medium": return 1.0;
+        case "high": return mobile ? 1.15 : 1.5;
+        case "ultra": return mobile ? 1.25 : 2.0;
+        default: return mobile ? 1.15 : 1.5;
+      }
+    }
+
+    function applyQuality(level){
+      qualityLevel = (level === "low" || level === "medium" || level === "high" || level === "ultra") ? level : "high";
+      const scale = qualityToScale(qualityLevel);
+
+      // Base DPR with cap (critical on mobile)
+      const base = Math.min(window.devicePixelRatio || 1, isMobileLike() ? 1.5 : 2.0);
+      currentPixelRatio = base * scale;
+
+      if (renderer) renderer.setPixelRatio(currentPixelRatio);
+      if (composer && composer.setPixelRatio) composer.setPixelRatio(currentPixelRatio);
+
+      // FXAA enabled except in low mode
+      if (fxaaPass) fxaaPass.enabled = (qualityLevel !== "low");
+
+      try{ localStorage.setItem(QUALITY_KEY, qualityLevel); }catch(_){}
+      resize();
+    }
+
+    function applySmoothShading(enabled){
+      smoothEnabled = !!enabled;
+      try{ localStorage.setItem(SMOOTH_KEY, smoothEnabled ? "1" : "0"); }catch(_){}
+
+      if (!currentModel) return;
+
+      currentModel.traverse((obj) => {
+        if (!obj.isMesh) return;
+
+        const g = obj.geometry;
+        if (smoothEnabled && g && g.computeVertexNormals){
+          // Improves lighting smoothness without changing geometry
+          g.computeVertexNormals();
+          g.normalsNeedUpdate = true;
+        }
+
+        const mats = Array.isArray(obj.material) ? obj.material : [obj.material];
+        for (const m of mats){
+          if (!m) continue;
+          // Avoid faceted look when possible
+          if ("flatShading" in m) m.flatShading = smoothEnabled ? false : m.flatShading;
+          m.needsUpdate = true;
+        }
+      });
+    }
+
+    function applyFallbackGreenToUnstyledMeshes(model){
+      const fallback = new THREE.Color(FALLBACK_GREEN_HEX);
+
+      const isDefaultWhite = (mat) => {
+        if (!mat || !mat.color) return false;
+        const c = mat.color;
+        const near = (a,b) => Math.abs(a-b) < 1e-3;
+        const looksWhite = near(c.r, 1) && near(c.g, 1) && near(c.b, 1);
+        const hasTexture = !!(mat.map || mat.emissiveMap || mat.roughnessMap || mat.metalnessMap || mat.normalMap || mat.alphaMap);
+        const usesVertexColors = !!mat.vertexColors;
+        return looksWhite && !hasTexture && !usesVertexColors;
+      };
+
+      model.traverse((obj) => {
+        if (!obj.isMesh) return;
+        const mats = Array.isArray(obj.material) ? obj.material : [obj.material];
+        let changed = false;
+
+        for (const m of mats){
+          if (isDefaultWhite(m)){
+            m.color.copy(fallback);
+            if (typeof m.roughness === "number") m.roughness = 0.65;
+            if (typeof m.metalness === "number") m.metalness = 0.05;
+            m.needsUpdate = true;
+            changed = true;
+          }
+        }
+        if (changed && obj.material) obj.material.needsUpdate = true;
+      });
+    }
+
+    function applyViewerBackground(hex){
+      const safeHex = (typeof hex === "string" && /^#([0-9a-fA-F]{6})$/.test(hex)) ? hex : DEFAULT_BG_HEX;
+      if (scene) scene.background = new THREE.Color(safeHex);
+      if (el.bgColor) el.bgColor.value = safeHex;
+      if (el.bgColorMobile) el.bgColorMobile.value = safeHex;
+      try{ localStorage.setItem(BG_STORAGE_KEY, safeHex); }catch(_){}
+    }
+
+    function createFiniteGrid(){
+      const size = 60;
+      const divisions = 60;
+      const grid = new THREE.GridHelper(size, divisions, 0x94a3b8, 0xcbd5e1);
+      grid.material.opacity = 0.35;
+      grid.material.transparent = true;
+      grid.renderOrder = -1;
+      return grid;
+    }
+
+    function createInfiniteGrid(){
+      const geom = new THREE.PlaneGeometry(2, 2, 1, 1);
+      geom.rotateX(-Math.PI / 2);
+
+      const material = new THREE.ShaderMaterial({
+        transparent: true,
+        depthWrite: false,
+        uniforms: {
+          uMajorStep: { value: 1.0 },
+          uMinorStep: { value: 0.2 },
+          uMajorAlpha: { value: 0.28 },
+          uMinorAlpha: { value: 0.12 },
+          uFadeDistance: { value: 80.0 },
+          uMajorColor: { value: new THREE.Color(0x94a3b8) },
+          uMinorColor: { value: new THREE.Color(0xcbd5e1) }
+        },
+        vertexShader: `
+          varying vec3 vWorldPos;
+          void main(){
+            vec4 worldPos = modelMatrix * vec4(position, 1.0);
+            vWorldPos = worldPos.xyz;
+            gl_Position = projectionMatrix * viewMatrix * worldPos;
+          }
+        `,
+        fragmentShader: `
+          precision highp float;
+          varying vec3 vWorldPos;
+          uniform float uMajorStep;
+          uniform float uMinorStep;
+          uniform float uMajorAlpha;
+          uniform float uMinorAlpha;
+          uniform float uFadeDistance;
+          uniform vec3 uMajorColor;
+          uniform vec3 uMinorColor;
+
+          float gridLine(float stepSize, float width){
+            vec2 coord = vWorldPos.xz / stepSize;
+            vec2 grid = abs(fract(coord - 0.5) - 0.5) / fwidth(coord);
+            float line = min(grid.x, grid.y);
+            return 1.0 - clamp(line - width, 0.0, 1.0);
+          }
+
+          void main(){
+            float dist = length(vWorldPos.xz);
+            float fade = 1.0 - smoothstep(uFadeDistance * 0.35, uFadeDistance, dist);
+
+            float minor = gridLine(uMinorStep, 0.5) * uMinorAlpha;
+            float major = gridLine(uMajorStep, 0.7) * uMajorAlpha;
+
+            vec3 col = uMinorColor * minor + uMajorColor * major;
+            float alpha = clamp(minor + major, 0.0, 1.0) * fade;
+
+            if(alpha < 0.01) discard;
+            gl_FragColor = vec4(col, alpha);
+          }
+        `
+      });
+
+      const mesh = new THREE.Mesh(geom, material);
+      mesh.frustumCulled = false;
+      mesh.renderOrder = -2;
+      return mesh;
+    }
+
+    function setGridVisible(visible){
+      gridVisible = !!visible;
+      if (finiteGrid) finiteGrid.visible = gridVisible && (gridMode === "finite");
+      if (infiniteGrid) infiniteGrid.visible = gridVisible && (gridMode === "infinite");
+      const label = gridVisible ? "On" : "Off";
+      if (el.gridToggle) el.gridToggle.textContent = label;
+      if (el.gridToggleMobile) el.gridToggleMobile.textContent = label;
+      try{ localStorage.setItem(GRID_VISIBLE_KEY, gridVisible ? "1" : "0"); }catch(_){}
+    }
+
+    function setGridMode(mode){
+      gridMode = (mode === "infinite") ? "infinite" : "finite";
+      const label = (gridMode === "infinite") ? "Infinite" : "Finite";
+      if (el.gridMode) el.gridMode.textContent = label;
+      if (el.gridModeMobile) el.gridModeMobile.textContent = label;
+      if (finiteGrid) finiteGrid.visible = gridVisible && (gridMode === "finite");
+      if (infiniteGrid) infiniteGrid.visible = gridVisible && (gridMode === "infinite");
+      try{ localStorage.setItem(GRID_MODE_KEY, gridMode); }catch(_){}
+    }
+
+    function init(){
+      scene = new THREE.Scene();
+
+      let storedBg = null;
+      try{ storedBg = localStorage.getItem(BG_STORAGE_KEY); }catch(_){}
+      const initialBg = (storedBg && /^#([0-9a-fA-F]{6})$/.test(storedBg)) ? storedBg : DEFAULT_BG_HEX;
+      scene.background = new THREE.Color(initialBg);
+
+      camera = new THREE.PerspectiveCamera(60, 1, 0.1, 2000);
+      camera.position.set(6, 4, 8);
+
+      renderer = new THREE.WebGLRenderer({ canvas: el.canvas, antialias: true, alpha: false });
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+      currentPixelRatio = renderer.getPixelRatio();
+
+      controls = new OrbitControls(camera, renderer.domElement);
+      controls.enableDamping = true;
+      controls.dampingFactor = 0.06;
+      controls.target.set(0, 1, 0);
+
+      // Postprocessing (FXAA anti-aliasing) + quality control
+      composer = new EffectComposer(renderer);
+      renderPass = new RenderPass(scene, camera);
+      composer.addPass(renderPass);
+
+      fxaaPass = new ShaderPass(FXAAShader);
+      fxaaPass.enabled = true; // controlled by applyQuality
+      composer.addPass(fxaaPass);
+
+      scene.add(new THREE.HemisphereLight(0xffffff, 0x223344, 0.9));
+      const dir = new THREE.DirectionalLight(0xffffff, 0.9);
+      dir.position.set(6, 10, 4);
+      scene.add(dir);
+
+      finiteGrid = createFiniteGrid();
+      infiniteGrid = createInfiniteGrid();
+      scene.add(finiteGrid);
+      scene.add(infiniteGrid);
+
+      let storedVisible = null;
+      let storedMode = null;
+      try{
+        storedVisible = localStorage.getItem(GRID_VISIBLE_KEY);
+        storedMode = localStorage.getItem(GRID_MODE_KEY);
+      }catch(_){}
+      setGridMode(storedMode === "infinite" ? "infinite" : "finite");
+      setGridVisible(storedVisible === "0" ? false : true);
+
+      ifcLoader = new IFCLoader();
+      ifcLoader.ifcManager.setWasmPath(WEB_IFC_WASM_PATH);
+
+      // Desktop events
+      el.btnLoad.addEventListener("click", () => el.fileInput.click());
+      el.fileInput.addEventListener("change", onPickFile);
+      el.btnFit.addEventListener("click", () => { if (currentModel) fitToObject(currentModel); });
+      el.btnReset.addEventListener("click", resetCamera);
+      el.btnClear.addEventListener("click", clearModel);
+      el.bgColor.addEventListener("input", (e) => applyViewerBackground(e.target.value));
+      el.bgWhite.addEventListener("click", () => applyViewerBackground(DEFAULT_BG_HEX));
+      el.bgDark.addEventListener("click", () => applyViewerBackground(DARK_BG_HEX));
+      el.gridToggle.addEventListener("click", () => setGridVisible(!gridVisible));
+      el.gridMode.addEventListener("click", () => setGridMode(gridMode === "finite" ? "infinite" : "finite"));
+
+      // Mobile events
+      el.btnLoadMobile.addEventListener("click", () => el.fileInputMobile.click());
+      el.fileInputMobile.addEventListener("change", onPickFile);
+      el.btnFitMobile.addEventListener("click", () => { if (currentModel) fitToObject(currentModel); });
+      el.btnResetMobile.addEventListener("click", resetCamera);
+      el.btnClearMobile.addEventListener("click", clearModel);
+      el.bgColorMobile.addEventListener("input", (e) => applyViewerBackground(e.target.value));
+      el.bgWhiteMobile.addEventListener("click", () => applyViewerBackground(DEFAULT_BG_HEX));
+      el.bgDarkMobile.addEventListener("click", () => applyViewerBackground(DARK_BG_HEX));
+      el.gridToggleMobile.addEventListener("click", () => setGridVisible(!gridVisible));
+      el.gridModeMobile.addEventListener("click", () => setGridMode(gridMode === "finite" ? "infinite" : "finite"));
+
+      // Mobile header buttons
+      el.btnMenu.addEventListener("click", () => setToolsOpen(el.toolbarPanel.hidden));
+      el.btnHelp.addEventListener("click", () => setHelpVisible(el.helpCard.style.display === "none"));
+      el.helpClose.addEventListener("click", () => setHelpVisible(false));
+
+      // restore UI prefs
+      let toolsOpen = null, helpVisible = null;
+      try{
+        toolsOpen = localStorage.getItem(TOOLS_OPEN_KEY);
+        helpVisible = localStorage.getItem(HELP_VISIBLE_KEY);
+      }catch(_){}
+      setToolsOpen(toolsOpen === "1");
+      setHelpVisible(helpVisible === "0" ? false : true);
+
+      applyViewerBackground(initialBg);
+
+      // Restore and wire Quality / Smooth Shading (persisted)
+      let storedQ = null, storedS = null;
+      try{
+        storedQ = localStorage.getItem(QUALITY_KEY);
+        storedS = localStorage.getItem(SMOOTH_KEY);
+      }catch(_){}
+
+      qualityLevel = (storedQ === "low" || storedQ === "medium" || storedQ === "high" || storedQ === "ultra") ? storedQ : "high";
+      smoothEnabled = (storedS === "1");
+
+      if (el.qualitySelect) el.qualitySelect.value = qualityLevel;
+      if (el.qualitySelectMobile) el.qualitySelectMobile.value = qualityLevel;
+      if (el.smoothShading) el.smoothShading.checked = smoothEnabled;
+      if (el.smoothShadingMobile) el.smoothShadingMobile.checked = smoothEnabled;
+
+      if (el.qualitySelect) el.qualitySelect.addEventListener("change", (e) => {
+        const v = e.target.value;
+        applyQuality(v);
+        if (el.qualitySelectMobile) el.qualitySelectMobile.value = v;
+      });
+      if (el.smoothShading) el.smoothShading.addEventListener("change", (e) => {
+        const v = !!e.target.checked;
+        applySmoothShading(v);
+        if (el.smoothShadingMobile) el.smoothShadingMobile.checked = v;
+      });
+
+      if (el.qualitySelectMobile) el.qualitySelectMobile.addEventListener("change", (e) => {
+        const v = e.target.value;
+        applyQuality(v);
+        if (el.qualitySelect) el.qualitySelect.value = v;
+      });
+      if (el.smoothShadingMobile) el.smoothShadingMobile.addEventListener("change", (e) => {
+        const v = !!e.target.checked;
+        applySmoothShading(v);
+        if (el.smoothShading) el.smoothShading.checked = v;
+      });
+
+      // Apply immediately
+      applyQuality(qualityLevel);
+      applySmoothShading(smoothEnabled);
+
+      window.addEventListener("resize", resize, { passive:true });
+      window.addEventListener("orientationchange", () => setTimeout(resize, 250), { passive:true });
+      resize();
+      renderer.setAnimationLoop(tick);
+
+      el.defaultInfo.textContent = `Default model: ${DEFAULT_IFC_URL.replace("./","")}`;
+      autoLoadDefault();
+
+      setStatus("Ready");
+    }
+
+    function resize(){
+      const w = el.viewer.clientWidth;
+      const h = el.viewer.clientHeight;
+
+      camera.aspect = w / h;
+      camera.updateProjectionMatrix();
+
+      renderer.setSize(w, h, false);
+
+      if (composer){
+        composer.setSize(w, h);
+
+        // FXAA resolution accounts for pixel ratio
+        if (fxaaPass?.material?.uniforms?.resolution){
+          fxaaPass.material.uniforms.resolution.value.set(
+            1 / (w * currentPixelRatio),
+            1 / (h * currentPixelRatio)
+          );
+        }
+      }
+    }
+
+    function tick(){
+      if (infiniteGrid){
+        infiniteGrid.position.x = controls.target.x;
+        infiniteGrid.position.z = controls.target.z;
+      }
+      controls.update();
+
+      if (composer && fxaaPass && fxaaPass.enabled){
+        composer.render();
+      } else {
+        renderer.render(scene, camera);
+      }
+    }
+
+    function resetCamera(){
+      clearError();
+      controls.reset();
+      camera.position.set(6, 4, 8);
+      controls.target.set(0, 1, 0);
+      controls.update();
+      setStatus("Ready");
+    }
+
+    function clearModel(){
+      clearError();
+      if (currentModel){
+        scene.remove(currentModel);
+        currentModel.traverse((obj) => {
+          if (obj.isMesh){
+            obj.geometry?.dispose?.();
+            if (Array.isArray(obj.material)) obj.material.forEach(m => m?.dispose?.());
+            else obj.material?.dispose?.();
+          }
+        });
+        currentModel = null;
+      }
+      if (currentURL){
+        URL.revokeObjectURL(currentURL);
+        currentURL = null;
+      }
+      setStatus("Cleared");
+    }
+
+    function fitToObject(object3D){
+      const box = new THREE.Box3().setFromObject(object3D);
+      const size = new THREE.Vector3();
+      const center = new THREE.Vector3();
+      box.getSize(size);
+      box.getCenter(center);
+
+      const maxDim = Math.max(size.x, size.y, size.z);
+      const fov = camera.fov * (Math.PI / 180);
+      let cameraZ = Math.abs(maxDim / (2 * Math.tan(fov / 2)));
+      cameraZ *= 1.4;
+
+      camera.position.set(center.x + cameraZ, center.y + cameraZ * 0.5, center.z + cameraZ);
+      controls.target.copy(center);
+      controls.update();
+      setStatus("Fitted");
+    }
+
+    async function autoLoadDefault(){
+      clearError();
+      setStatus("Loading…");
+      try{
+        ifcLoader.load(
+          DEFAULT_IFC_URL,
+          (model) => {
+            clearModel();
+            currentModel = model;
+            applyFallbackGreenToUnstyledMeshes(model);
+            applySmoothShading(smoothEnabled);
+            scene.add(model);
+            fitToObject(model);
+            setStatus("Loaded");
+          },
+          undefined,
+          (err) => showError("Failed to load the default IFC. Confirm the .ifc file exists in the repo root.", err)
+        );
+      }catch(err){
+        showError("Unexpected error while loading default IFC", err);
+      }
+    }
+
+    function onPickFile(e){
+      const file = e.target.files?.[0];
+      if (!file) return;
+      clearError();
+      setStatus("Loading…");
+      try{
+        const url = URL.createObjectURL(file);
+        currentURL = url;
+        ifcLoader.load(
+          url,
+          (model) => {
+            clearModel();
+            currentModel = model;
+            applyFallbackGreenToUnstyledMeshes(model);
+            applySmoothShading(smoothEnabled);
+            scene.add(model);
+            fitToObject(model);
+            setStatus("Loaded");
+          },
+          undefined,
+          (err) => showError("Failed to load the selected IFC file.", err)
+        );
+      }catch(err){
+        showError("Unexpected error while opening local IFC", err);
+      } finally {
+        if (e.target) e.target.value = "";
+      }
+    }
+
+    try{ init(); }catch(err){ showError("Boot error", err); }
+  </script>
+</body>
+</html>
