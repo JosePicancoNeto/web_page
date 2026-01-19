@@ -1,0 +1,495 @@
+<!doctype html>
+<html lang="pt" translate="no" class="notranslate">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+  <meta name="google" content="notranslate" />
+  <title>Heliroma — Requerimentos do Cliente</title>
+  <style>
+    :root{
+      --bg:#ffffff;
+      --text:#0f172a;
+      --muted:#475569;
+      --border:rgba(15,23,42,.12);
+      --accent:#16a34a;
+      --accent2:#0ea5e9;
+      --danger:#dc2626;
+      --card:#ffffff;
+      --shadow: 0 14px 40px rgba(0,0,0,.10);
+      --radius: 18px;
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%; margin:0; font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial; color:var(--text); background:var(--bg);}
+    a{color:inherit; text-decoration:none}
+    .container{width:min(1120px, calc(100% - 32px)); margin:0 auto;}
+
+    .nav{
+      position:sticky; top:0; z-index:100;
+      background:rgba(255,255,255,.75);
+      backdrop-filter: blur(10px);
+      border-bottom:1px solid var(--border);
+    }
+    .navbar{display:flex; align-items:center; justify-content:space-between; gap:14px; padding:12px 0; flex-wrap:wrap;}
+    .brand{display:flex; align-items:center; gap:10px; font-weight:900; letter-spacing:.2px;}
+    .badge{width:10px; height:10px; border-radius:999px; background:var(--accent); box-shadow:0 0 0 7px rgba(22,163,74,.14);}
+    .navlinks{display:flex; align-items:center; gap:10px; flex-wrap:wrap;}
+    .navlinks a{padding:10px 12px; border-radius:12px; color:var(--muted); font-weight:800;}
+    .navlinks a:hover{background:rgba(15,23,42,.04); color:var(--text);}
+
+    .btn{
+      display:inline-flex; align-items:center; justify-content:center; gap:10px;
+      padding:11px 14px; border-radius:14px;
+      border:1px solid var(--border);
+      background:rgba(15,23,42,.04);
+      font-weight:900;
+      cursor:pointer;
+      min-height:44px;
+      user-select:none;
+    }
+    .btn.primary{background:rgba(22,163,74,.14); border-color:rgba(22,163,74,.28);}
+    .btn.primary:hover{background:rgba(22,163,74,.18);}
+    .btn.secondary{background:rgba(14,165,233,.12); border-color:rgba(14,165,233,.28);}
+    .btn.secondary:hover{background:rgba(14,165,233,.16);}
+    .btn.danger{background:rgba(220,38,38,.10); border-color:rgba(220,38,38,.28);}
+    .btn.danger:hover{background:rgba(220,38,38,.14);}
+    .btn.small{padding:8px 10px; border-radius:12px; min-height:40px;}
+
+    .pageHeader{padding:22px 0 8px;}
+    .kicker{color:var(--muted); font-weight:900; letter-spacing:.2px;}
+    h1{margin:8px 0 0; font-size: clamp(24px, 3vw, 36px); line-height:1.05; font-weight:1000;}
+    .lead{margin:10px 0 0; color:var(--muted); line-height:1.6;}
+
+    .grid{display:grid; grid-template-columns: 1fr 360px; gap:14px; align-items:start; padding:14px 0 26px;}
+    .card{background:var(--card); border:1px solid var(--border); border-radius:var(--radius); box-shadow: var(--shadow);}
+    .cardPad{padding:16px;}
+    .sectionTitle{display:flex; align-items:flex-end; justify-content:space-between; gap:10px; margin:0 0 10px;}
+    .sectionTitle h2{margin:0; font-size:16px; font-weight:1000;}
+    .sectionTitle .hint{margin:0; color:var(--muted); font-weight:800; font-size:12px;}
+
+    .fieldRow{display:grid; grid-template-columns: 1fr 1fr; gap:10px;}
+    .field{display:flex; flex-direction:column; gap:6px; margin:10px 0;}
+    .field label{font-weight:950; font-size:12px; color:var(--muted);}
+    .field input, .field select, .field textarea{
+      border:1px solid var(--border);
+      border-radius:14px;
+      padding:10px 12px;
+      font-weight:800;
+      outline:none;
+      min-height:44px;
+      background:#fff;
+    }
+    .field textarea{min-height:110px; resize:vertical; font-weight:750; line-height:1.5;}
+    .field input:focus, .field select:focus, .field textarea:focus{
+      border-color: rgba(14,165,233,.35);
+      box-shadow:0 0 0 6px rgba(14,165,233,.12);
+    }
+
+    .hr{height:1px; background:var(--border); margin:12px 0;}
+    .pill{display:inline-flex; align-items:center; gap:8px; padding:6px 10px; border-radius:999px; border:1px solid var(--border); background:rgba(15,23,42,.03); color:var(--muted); font-weight:900; font-size:12px;}
+
+    .notice{
+      padding:12px 14px;
+      border-radius:14px;
+      border:1px solid rgba(234,179,8,.35);
+      background:rgba(234,179,8,.12);
+      color:#7c5d00;
+      font-weight:850;
+      line-height:1.55;
+    }
+    .notice.ok{border-color: rgba(22,163,74,.35); background: rgba(22,163,74,.10); color:#14532d;}
+    .notice.bad{border-color: rgba(220,38,38,.35); background: rgba(220,38,38,.10); color:#7f1d1d;}
+
+    .actions{display:flex; gap:10px; flex-wrap:wrap; align-items:center; justify-content:flex-start;}
+    .sidebarBox .actions{justify-content:stretch;}
+    .sidebarBox .actions .btn{width:100%;}
+    .meta{color:var(--muted); font-weight:850; font-size:12px; line-height:1.5;}
+
+    .footer{padding:18px 0 28px; border-top:1px solid var(--border); color:var(--muted);}
+    .footerGrid{display:flex; justify-content:space-between; gap:10px; flex-wrap:wrap;}
+
+    @media (max-width: 980px){
+      .grid{grid-template-columns: 1fr;}
+      .fieldRow{grid-template-columns: 1fr;}
+    }
+  </style>
+</head>
+<body>
+  <div class="nav">
+    <div class="container">
+      <div class="navbar">
+        <a class="brand" href="./index.html" aria-label="Heliroma home">
+          <span class="badge" aria-hidden="true"></span>
+          <span>Heliroma</span>
+        </a>
+        <div class="navlinks" role="navigation" aria-label="Primary">
+          <a href="./index.html#servicos">Serviços</a>
+          <a href="./technical_info.html">Informação técnica</a>
+          <a href="./viewer.html" target="_blank" rel="noopener">Viewer</a>
+          <a href="./index.html#contato">Contato</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <main>
+    <div class="container">
+      <div class="pageHeader">
+        <div class="kicker">Área do Cliente • Requerimentos</div>
+        <h1>Requerimentos do cliente</h1>
+        <p class="lead">
+          Preencha e mantenha atualizadas as informações do seu projeto. Os dados são guardados localmente no seu navegador (demo).
+          Em produção, isto deve ser ligado a uma base de dados e autenticação real.
+        </p>
+      </div>
+
+      <div class="grid">
+        <section class="card">
+          <div class="cardPad">
+            <div class="sectionTitle">
+              <h2>Dados do cliente</h2>
+              <p class="hint">Campos essenciais para contacto e contexto.</p>
+            </div>
+
+            <div class="fieldRow">
+              <div class="field">
+                <label for="clientName">Nome / Empresa *</label>
+                <input id="clientName" type="text" placeholder="Ex.: Empresa ABC, Lda." />
+              </div>
+              <div class="field">
+                <label for="clientEmail">Email *</label>
+                <input id="clientEmail" type="email" placeholder="cliente@empresa.com" autocomplete="email" />
+              </div>
+            </div>
+
+            <div class="fieldRow">
+              <div class="field">
+                <label for="clientPhone">Telefone</label>
+                <input id="clientPhone" type="tel" placeholder="+351 ..." autocomplete="tel" />
+              </div>
+              <div class="field">
+                <label for="clientRole">Cargo / Função</label>
+                <input id="clientRole" type="text" placeholder="Ex.: Gestor de Projeto" />
+              </div>
+            </div>
+
+            <div class="hr"></div>
+
+            <div class="sectionTitle">
+              <h2>Dados do projeto</h2>
+              <p class="hint">Identificação e requisitos de entrega.</p>
+            </div>
+
+            <div class="fieldRow">
+              <div class="field">
+                <label for="projectName">Projeto *</label>
+                <input id="projectName" type="text" placeholder="Ex.: Edifício X" />
+              </div>
+              <div class="field">
+                <label for="projectLocation">Localização</label>
+                <input id="projectLocation" type="text" placeholder="Cidade, País" />
+              </div>
+            </div>
+
+            <div class="fieldRow">
+              <div class="field">
+                <label for="stage">Fase</label>
+                <select id="stage">
+                  <option value="">Selecione</option>
+                  <option value="estudo_previo">Estudo prévio</option>
+                  <option value="anteprojeto">Anteprojeto</option>
+                  <option value="projeto_execucao">Projeto de execução</option>
+                  <option value="obra">Obra</option>
+                  <option value="as_built">As-built</option>
+                </select>
+              </div>
+              <div class="field">
+                <label for="deadline">Prazo desejado</label>
+                <input id="deadline" type="date" />
+              </div>
+            </div>
+
+            <div class="field">
+              <label for="scope">Escopo / Entregáveis *</label>
+              <textarea id="scope" placeholder="Descreva o que precisa (ex.: modelo IFC, relatórios, desenhos, medições, revisão, etc.)."></textarea>
+            </div>
+
+            <div class="hr"></div>
+
+            <div class="sectionTitle">
+              <h2>Requisitos técnicos</h2>
+              <p class="hint">Preferências para BIM, IFC e visualização.</p>
+            </div>
+
+            <div class="fieldRow">
+              <div class="field">
+                <label for="ifcVersion">Versão IFC preferida</label>
+                <select id="ifcVersion">
+                  <option value="">Selecione</option>
+                  <option value="IFC2x3">IFC2x3</option>
+                  <option value="IFC4">IFC4</option>
+                  <option value="IFC4x3">IFC4x3</option>
+                </select>
+              </div>
+              <div class="field">
+                <label for="coordSystem">Sistema de coordenadas</label>
+                <select id="coordSystem">
+                  <option value="">Selecione</option>
+                  <option value="local">Local do projeto</option>
+                  <option value="georreferenciado">Georreferenciado</option>
+                  <option value="a_definir">A definir</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="fieldRow">
+              <div class="field">
+                <label for="units">Unidades</label>
+                <select id="units">
+                  <option value="">Selecione</option>
+                  <option value="mm">Milímetros (mm)</option>
+                  <option value="cm">Centímetros (cm)</option>
+                  <option value="m">Metros (m)</option>
+                </select>
+              </div>
+              <div class="field">
+                <label for="viewerPrefs">Preferências no Viewer</label>
+                <input id="viewerPrefs" type="text" placeholder="Ex.: fundo branco, grid ativado, qualidade alta" />
+              </div>
+            </div>
+
+            <div class="field">
+              <label for="notes">Observações adicionais</label>
+              <textarea id="notes" placeholder="Inclua regras internas, restrições, requisitos de validação, etc."></textarea>
+            </div>
+
+            <div class="hr"></div>
+
+            <div class="sectionTitle">
+              <h2>Ficheiros de referência (opcional)</h2>
+              <p class="hint">Nesta demo, guardamos apenas os nomes dos ficheiros (não o conteúdo).</p>
+            </div>
+
+            <div class="field">
+              <label for="attachments">Selecionar ficheiros</label>
+              <input id="attachments" type="file" multiple />
+              <div class="meta" id="attachmentsList" style="margin-top:8px;">Nenhum ficheiro selecionado.</div>
+            </div>
+
+            <div class="hr"></div>
+
+            <div class="field">
+              <label>
+                <input id="consent" type="checkbox" style="min-height:auto; margin-right:8px;">
+                Concordo com o tratamento dos dados para fins de suporte ao projeto. *
+              </label>
+            </div>
+
+            <div class="actions" style="margin-top:10px;">
+              <button class="btn primary" id="saveBtn" type="button">Guardar</button>
+              <button class="btn secondary" id="downloadBtn" type="button">Exportar JSON</button>
+              <button class="btn" id="printBtn" type="button">Imprimir</button>
+              <button class="btn danger" id="clearBtn" type="button">Limpar</button>
+            </div>
+
+            <div style="margin-top:12px;">
+              <div class="notice" id="statusBox" style="display:none;"></div>
+            </div>
+          </div>
+        </section>
+
+        <aside class="card sidebarBox">
+          <div class="cardPad">
+            <div class="sectionTitle">
+              <h2>Resumo</h2>
+              <p class="hint">Estado e atalhos.</p>
+            </div>
+
+            <div class="meta">
+              <div><span class="pill">Demo local</span></div>
+              <div style="margin-top:10px;">
+                <b>Última gravação:</b>
+                <div id="lastSaved">—</div>
+              </div>
+              <div style="margin-top:10px;">
+                <b>Versão:</b>
+                <div>client_requirements_v1</div>
+              </div>
+            </div>
+
+            <div class="hr"></div>
+
+            <div class="notice" style="margin-bottom:12px;">
+              Dica: clique em <b>Guardar</b> para manter os dados no seu navegador. Para produção, ligue a um backend e permissões.
+            </div>
+
+            <div class="actions">
+              <a class="btn" href="./index.html">Voltar ao website</a>
+              <a class="btn" href="./technical_info.html">Abrir Informação técnica</a>
+              <a class="btn" href="./viewer.html" target="_blank" rel="noopener">Abrir Viewer (standalone)</a>
+            </div>
+
+            <div class="hr"></div>
+
+            <div class="meta">
+              Se você quiser, eu também posso transformar isto num formulário “real” com envio para backend (API) e anexos em cloud.
+            </div>
+          </div>
+        </aside>
+      </div>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="container">
+      <div class="footerGrid">
+        <div>© 2026 Heliroma — All rights reserved.</div>
+        <div>Template: Requerimentos do Cliente</div>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    (function(){
+      const STORAGE_KEY = "heliroma_client_requirements_v1";
+
+      const el = (id) => document.getElementById(id);
+      const statusBox = el("statusBox");
+      const lastSaved = el("lastSaved");
+      const attachmentsInput = el("attachments");
+      const attachmentsList = el("attachmentsList");
+
+      const fields = [
+        "clientName","clientEmail","clientPhone","clientRole",
+        "projectName","projectLocation","stage","deadline",
+        "scope","ifcVersion","coordSystem","units","viewerPrefs","notes",
+        "consent"
+      ];
+
+      function nowISO(){ return new Date().toISOString(); }
+
+      function showStatus(type, msg){
+        statusBox.className = "notice " + (type || "");
+        statusBox.style.display = "block";
+        statusBox.textContent = msg;
+      }
+
+      function getAttachmentNames(){
+        const files = attachmentsInput.files;
+        if (!files || !files.length) return [];
+        return Array.from(files).map(f => f.name);
+      }
+
+      function renderAttachmentNames(names){
+        if (!names || names.length === 0){
+          attachmentsList.textContent = "Nenhum ficheiro selecionado.";
+          return;
+        }
+        attachmentsList.textContent = names.join(" • ");
+      }
+
+      attachmentsInput.addEventListener("change", () => {
+        renderAttachmentNames(getAttachmentNames());
+      });
+
+      function readForm(){
+        const data = {};
+        for (const id of fields){
+          const node = el(id);
+          if (!node) continue;
+          if (node.type === "checkbox") data[id] = !!node.checked;
+          else data[id] = (node.value || "").trim();
+        }
+        data.attachments = getAttachmentNames();
+        data.updated_at = nowISO();
+        data.version = "client_requirements_v1";
+        return data;
+      }
+
+      function writeForm(data){
+        if (!data) return;
+        for (const id of fields){
+          const node = el(id);
+          if (!node) continue;
+          if (node.type === "checkbox") node.checked = !!data[id];
+          else node.value = data[id] ?? "";
+        }
+        renderAttachmentNames(data.attachments || []);
+        if (data.updated_at) lastSaved.textContent = new Date(data.updated_at).toLocaleString();
+      }
+
+      function validate(data){
+        const missing = [];
+        if (!data.clientName) missing.push("Nome / Empresa");
+        if (!data.clientEmail) missing.push("Email");
+        if (!data.projectName) missing.push("Projeto");
+        if (!data.scope) missing.push("Escopo / Entregáveis");
+        if (!data.consent) missing.push("Consentimento");
+        return missing;
+      }
+
+      function save(){
+        const data = readForm();
+        const missing = validate(data);
+        if (missing.length){
+          showStatus("bad", "Por favor, preencha os campos obrigatórios: " + missing.join(", ") + ".");
+          return;
+        }
+        try{
+          localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+          lastSaved.textContent = new Date(data.updated_at).toLocaleString();
+          showStatus("ok", "Dados guardados com sucesso.");
+        }catch(e){
+          showStatus("bad", "Falha ao guardar (armazenamento indisponível).");
+        }
+      }
+
+      function load(){
+        try{
+          const raw = localStorage.getItem(STORAGE_KEY);
+          if (!raw) return;
+          const data = JSON.parse(raw);
+          writeForm(data);
+        }catch(_){}
+      }
+
+      function clearAll(){
+        const confirmed = confirm("Tem certeza que deseja limpar os dados deste formulário?");
+        if (!confirmed) return;
+        try{ localStorage.removeItem(STORAGE_KEY); }catch(_){}
+        for (const id of fields){
+          const node = el(id);
+          if (!node) continue;
+          if (node.type === "checkbox") node.checked = false;
+          else node.value = "";
+        }
+        attachmentsInput.value = "";
+        renderAttachmentNames([]);
+        lastSaved.textContent = "—";
+        showStatus("", "Formulário limpo. Se desejar, clique em Guardar para registar novamente.");
+      }
+
+      function downloadJSON(){
+        const data = readForm();
+        const blob = new Blob([JSON.stringify(data, null, 2)], {type: "application/json"});
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        const safeName = (data.projectName || "requerimentos").replace(/[^a-z0-9\\-_]+/gi, "_").toLowerCase();
+        a.download = "heliroma_" + safeName + "_requirements.json";
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+        URL.revokeObjectURL(url);
+        showStatus("ok", "JSON exportado. Verifique os downloads do seu navegador.");
+      }
+
+      el("saveBtn").addEventListener("click", save);
+      el("clearBtn").addEventListener("click", clearAll);
+      el("downloadBtn").addEventListener("click", downloadJSON);
+      el("printBtn").addEventListener("click", () => window.print());
+
+      load();
+    })();
+  </script>
+</body>
+</html>
