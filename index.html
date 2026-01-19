@@ -1,0 +1,436 @@
+<!doctype html>
+<html lang="pt" translate="no" class="notranslate">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+  <meta name="google" content="notranslate" />
+  <title>Heliroma — Website</title>
+  <style>
+    :root{
+      --bg:#ffffff;
+      --text:#0f172a;
+      --muted:#475569;
+      --border:rgba(15,23,42,.12);
+      --accent:#16a34a;
+      --card:#ffffff;
+      --shadow: 0 14px 40px rgba(0,0,0,.10);
+      --radius: 18px;
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%; margin:0; font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial; color:var(--text); background:var(--bg);}    
+    a{color:inherit; text-decoration:none}
+    .container{width:min(1120px, calc(100% - 32px)); margin:0 auto;}
+
+    .nav{
+      position:sticky; top:0; z-index:100;
+      background:rgba(255,255,255,.75);
+      backdrop-filter: blur(10px);
+      border-bottom:1px solid var(--border);
+    }
+    .navbar{display:flex; align-items:center; justify-content:space-between; gap:14px; padding:12px 0;}
+    .brand{display:flex; align-items:center; gap:10px; font-weight:900; letter-spacing:.2px;}
+    .badge{width:10px; height:10px; border-radius:999px; background:var(--accent); box-shadow:0 0 0 7px rgba(22,163,74,.14);}    
+    .navlinks{display:flex; align-items:center; gap:14px; flex-wrap:wrap;}
+    .navlinks a{padding:10px 12px; border-radius:12px; color:var(--muted); font-weight:700;}
+    .navlinks a:hover{background:rgba(15,23,42,.04); color:var(--text);}    
+
+    .btn{
+      display:inline-flex; align-items:center; justify-content:center; gap:10px;
+      padding:11px 14px; border-radius:14px;
+      border:1px solid var(--border);
+      background:rgba(15,23,42,.04);
+      font-weight:800;
+      cursor:pointer;
+      min-height:44px;
+    }
+    .btn.primary{background:rgba(22,163,74,.14); border-color:rgba(22,163,74,.28);}    
+    .btn.primary:hover{background:rgba(22,163,74,.18);}
+    .btn.ghost{background:transparent;}
+    .btn.small{padding:8px 10px; border-radius:12px; min-height:40px;}
+    .btn:disabled{opacity:.6; cursor:not-allowed;}
+
+    .hero{padding:40px 0 26px;}
+    .heroGrid{display:grid; grid-template-columns: 1.15fr .85fr; gap:22px; align-items:stretch;}
+    .card{background:var(--card); border:1px solid var(--border); border-radius:var(--radius); box-shadow: var(--shadow);}
+    .heroCard{padding:22px;}
+    .kicker{color:var(--muted); font-weight:800; letter-spacing:.2px;}
+    .h1{font-size: clamp(28px, 4vw, 44px); line-height:1.05; margin:10px 0 10px; font-weight:950;}
+    .p{color:var(--muted); line-height:1.6; margin:0 0 18px;}
+    .heroActions{display:flex; gap:10px; flex-wrap:wrap;}
+
+    .stats{display:grid; grid-template-columns: repeat(3, 1fr); gap:10px; padding:18px;}
+    .stat{padding:14px; border-radius:16px; border:1px solid var(--border); background:rgba(15,23,42,.02);}
+    .stat .n{font-size:22px; font-weight:950;}
+    .stat .l{color:var(--muted); font-weight:800; font-size:12px; margin-top:4px;}
+
+    .section{padding:26px 0;}
+    .sectionTitle{display:flex; align-items:flex-end; justify-content:space-between; gap:16px; margin-bottom:14px;}
+    .sectionTitle h2{margin:0; font-size:22px; font-weight:950;}
+    .sectionTitle p{margin:0; color:var(--muted);}
+    .grid3{display:grid; grid-template-columns: repeat(3, 1fr); gap:12px;}
+    .feature{padding:16px;}
+    .feature h3{margin:8px 0 6px; font-size:16px; font-weight:950;}
+    .feature p{margin:0; color:var(--muted); line-height:1.55;}
+    .pill{display:inline-flex; align-items:center; gap:8px; padding:6px 10px; border-radius:999px; border:1px solid var(--border); background:rgba(15,23,42,.03); color:var(--muted); font-weight:800; font-size:12px;}
+
+    .footer{padding:18px 0 28px; border-top:1px solid var(--border); color:var(--muted);}
+    .footerGrid{display:flex; justify-content:space-between; gap:10px; flex-wrap:wrap;}
+
+    /* Portal (embutido no mesmo index) */
+    .portalWrap{padding:18px 0 26px;}
+    .portalGrid{display:grid; grid-template-columns: 340px 1fr; gap:14px; align-items:stretch;}
+    .sidebar{padding:14px;}
+    .sidebar h3{margin:0 0 8px; font-weight:950;}
+    .sidebar .muted{color:var(--muted); line-height:1.55; margin:0 0 12px;}
+    .sidebar .menu{display:flex; flex-direction:column; gap:8px;}
+    .sidebar .menu a, .sidebar .menu button{
+      text-align:left;
+      padding:10px 12px;
+      border-radius:14px;
+      border:1px solid var(--border);
+      background:rgba(15,23,42,.02);
+      font-weight:850;
+      color:var(--text);
+    }
+    .sidebar .menu a:hover, .sidebar .menu button:hover{background:rgba(15,23,42,.04);}
+    .viewerCard{overflow:hidden;}
+    .viewerFrame{width:100%; height: calc(100dvh - 170px); border:0; display:block; background:#fff;}
+
+    .notice{padding:12px 14px; border-radius:14px; border:1px solid rgba(234,179,8,.35); background:rgba(234,179,8,.12); color:#7c5d00; font-weight:750; line-height:1.5;}
+
+    /* Login */
+    .loginGrid{display:grid; grid-template-columns: 1fr 1fr; gap:14px;}
+    .form{padding:16px;}
+    .field{display:flex; flex-direction:column; gap:6px; margin:10px 0;}
+    .field label{font-weight:900; font-size:12px; color:var(--muted);}
+    .field input{
+      height:44px; border-radius:14px; border:1px solid var(--border);
+      padding:0 12px; font-weight:800; outline:none;
+    }
+    .field input:focus{border-color: rgba(14,165,233,.35); box-shadow:0 0 0 6px rgba(14,165,233,.12);}    
+    .hr{height:1px; background:var(--border); margin:12px 0;}
+
+    /* Modal */
+    .overlay{
+      position:fixed; inset:0; background:rgba(2,6,23,.45);
+      display:none; align-items:center; justify-content:center;
+      padding:18px; z-index:200;
+    }
+    .overlay.show{display:flex;}
+    .modal{
+      width:min(1180px, 100%);
+      max-height:min(92dvh, 920px);
+      overflow:auto;
+      border-radius:20px;
+      background:#fff;
+      border:1px solid var(--border);
+      box-shadow: 0 24px 60px rgba(0,0,0,.25);
+    }
+    .modalHeader{
+      position:sticky; top:0;
+      background:rgba(255,255,255,.9);
+      backdrop-filter: blur(10px);
+      border-bottom:1px solid var(--border);
+      padding:10px 12px;
+      display:flex; align-items:center; justify-content:space-between; gap:10px;
+      z-index:1;
+    }
+    .modalHeader .t{font-weight:950;}
+    .modalBody{padding:12px;}
+
+    /* Clickable feature card (Informação técnica) */
+    .featureLink{display:block; cursor:pointer; transition: transform .12s ease, border-color .12s ease;}
+    .featureLink:hover{transform: translateY(-1px); border-color: rgba(22,163,74,.35);}
+    .featureLink:focus{outline:none; box-shadow:0 0 0 6px rgba(22,163,74,.14);}    
+
+    @media (max-width: 980px){
+      .heroGrid{grid-template-columns:1fr;}
+      .grid3{grid-template-columns:1fr;}
+      .portalGrid{grid-template-columns: 1fr;}
+      .viewerFrame{height: 70dvh;}
+      .loginGrid{grid-template-columns:1fr;}
+    }
+  </style>
+</head>
+<body>
+  <div class="nav">
+    <div class="container">
+      <div class="navbar">
+        <a class="brand" href="./index.html" aria-label="Heliroma home">
+          <span class="badge" aria-hidden="true"></span>
+          <span>Heliroma</span>
+        </a>
+        <div class="navlinks" role="navigation" aria-label="Primary">
+          <a href="#servicos">Serviços</a>
+          <a href="#solucoes">Soluções</a>
+          <a href="#contato">Contato</a>
+          <button class="btn small primary" id="openPortalBtn" type="button">Área do Cliente</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <main>
+    <section class="hero">
+      <div class="container">
+        <div class="heroGrid">
+          <div class="card heroCard">
+            <div class="kicker">Plataforma BIM • IFC Viewer • Informação técnica</div>
+            <h1 class="h1">Aceda ao seu modelo 3D e informação técnica com simplicidade.</h1>
+            <p class="p">
+              Este website é uma base institucional com um portal do cliente. No portal, o seu viewer IFC é carregado para navegação e apresentação,
+              com boa experiência em computador e telemóvel.
+            </p>
+            <div class="heroActions">
+              <button class="btn primary" id="openPortalBtn2" type="button">Entrar na Área do Cliente</button>
+            </div>
+            <div class="hr"></div>
+            <span class="pill">Inclui: viewer embutido • UX responsiva • demo login</span>
+          </div>
+
+          <div class="card stats">
+            <div class="stat"><div class="n">IFC</div><div class="l">Modelos Revit via IFC</div></div>
+            <div class="stat"><div class="n">Web</div><div class="l">Desktop e Mobile</div></div>
+            <div class="stat"><div class="n">Portal</div><div class="l">Área do cliente (demo)</div></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="servicos" class="section">
+      <div class="container">
+        <div class="sectionTitle">
+          <h2>Serviços</h2>
+          <p>Visão clara do que a empresa entrega.</p>
+        </div>
+        <div class="grid3">
+          <div class="card feature">
+            <span class="pill">BIM & IFC</span>
+            <h3>Visualização e entrega</h3>
+            <p>Publicação de modelos IFC na web, com usabilidade e qualidade visual.</p>
+                      <div style="margin-top:12px;">
+              <a class="btn small" href="./viewer.html" target="_blank" rel="noopener">Abrir Viewer (standalone)</a>
+            </div>
+          </div>
+
+          <div class="card feature">
+            <span class="pill">Dados</span>
+            <h3>Informação técnica</h3>
+            <p>Base pronta para evoluir: propriedades, documentos, relatórios e auditoria.</p>
+            <div style="margin-top:12px;">
+              <a class="btn small" href="./technical_info.html">Abrir Informação técnica</a>
+            </div>
+          </div>
+
+          <div class="card feature">
+            <span class="pill">Operação</span>
+            <h3>Portal do Cliente</h3>
+            <p>Área de acesso para clientes consultarem modelos e conteúdos do projeto.</p>
+                      <div style="margin-top:12px;">
+              <a class="btn small" href="./client_requirements.html" target="_blank" rel="noopener">Abrir Requerimentos</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="solucoes" class="section">
+      <div class="container">
+        <div class="sectionTitle">
+          <h2>Soluções</h2>
+          <p>Compatível com GitHub Pages (site estático).</p>
+        </div>
+        <div class="grid3">
+          <div class="card feature">
+            <span class="pill">Web-first</span>
+            <h3>Publicação rápida</h3>
+            <p>Estrutura simples e robusta para publicar e evoluir.</p>
+          </div>
+          <div class="card feature">
+            <span class="pill">Experiência</span>
+            <h3>UI responsiva</h3>
+            <p>Funciona bem no computador e no telemóvel.</p>
+          </div>
+          <div class="card feature">
+            <span class="pill">Integração</span>
+            <h3>Viewer embutido</h3>
+            <p>O viewer é carregado dentro do portal via iframe, mantendo estabilidade e fluidez.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="contato" class="section">
+      <div class="container">
+        <div class="sectionTitle">
+          <h2>Contato</h2>
+          <p>Para leads e suporte.</p>
+        </div>
+        <div class="card heroCard">
+          <p class="p" style="margin:0;">
+            Email: <b>info@heliroma.com</b><br/>
+            Telefone: <b>+351 000 000 000</b><br/>
+            Endereço: <b>Portugal</b>
+          </p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="container">
+      <div class="footerGrid">
+        <div>© 2026 Heliroma — All rights reserved.</div>
+        <div>info@heliroma.com • Portugal</div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Portal Modal -->
+  <div class="overlay" id="portalOverlay" aria-hidden="true">
+    <div class="modal" role="dialog" aria-modal="true" aria-label="Área do Cliente">
+      <div class="modalHeader">
+        <div class="t">Área do Cliente</div>
+        <div style="display:flex; gap:8px; flex-wrap:wrap;">
+          <button class="btn small" id="closePortalBtn" type="button">Fechar</button>
+        </div>
+      </div>
+      <div class="modalBody" id="portalBody"></div>
+    </div>
+  </div>
+
+  <script>
+    (function(){
+      const AUTH_KEY = "heliroma_demo_auth";
+      const overlay = document.getElementById("portalOverlay");
+      const portalBody = document.getElementById("portalBody");
+
+      function isAuthed(){
+        try { return localStorage.getItem(AUTH_KEY) === "1"; } catch(_) { return false; }
+      }
+      function setAuthed(v){
+        try { localStorage.setItem(AUTH_KEY, v ? "1" : "0"); } catch(_) {}
+      }
+
+      function openPortal(){
+        overlay.classList.add("show");
+        overlay.setAttribute("aria-hidden","false");
+        renderPortal();
+      }
+      function closePortal(){
+        overlay.classList.remove("show");
+        overlay.setAttribute("aria-hidden","true");
+      }
+
+      function renderPortal(){
+        if (!isAuthed()){
+          portalBody.innerHTML = `
+            <div style="max-width:640px;margin:0 auto;">
+              <div class="card form">
+                <div class="kicker">Login (Demo)</div>
+                <div class="h1" style="font-size:28px; margin-top:8px;">Entrar</div>
+                <p class="p">Isto é uma demo client-side (não é seguro para produção). Qualquer password com 3+ caracteres entra.</p>
+
+                <div id="loginError" class="notice" style="display:none; border-color: rgba(220,38,38,.35); background: rgba(220,38,38,.10); color:#7f1d1d;"></div>
+
+                <form id="loginForm">
+                  <div class="field">
+                    <label for="email">Email</label>
+                    <input id="email" type="email" placeholder="cliente@empresa.com" autocomplete="email" />
+                  </div>
+                  <div class="field">
+                    <label for="password">Password</label>
+                    <input id="password" type="password" placeholder="••••••••" autocomplete="current-password" />
+                  </div>
+                  <div style="display:flex; gap:10px; flex-wrap:wrap; margin-top:10px;">
+                    <button class="btn primary" type="submit" style="flex:1 1 auto;">Entrar</button>
+                    <button class="btn" id="demoFill" type="button">Preencher Demo</button>
+                  </div>
+                </form>
+
+                <div class="hr"></div>
+                <div class="pill">Após login, serão exibidos os atalhos do portal (Viewer e Informação técnica).</div>
+              </div>
+            </div>
+          `;
+
+          const form = document.getElementById("loginForm");
+          const err = document.getElementById("loginError");
+          const demo = document.getElementById("demoFill");
+
+          demo.addEventListener("click", () => {
+            document.getElementById("email").value = "cliente@heliroma.com";
+            document.getElementById("password").value = "demo";
+          });
+
+          form.addEventListener("submit", (e) => {
+            e.preventDefault();
+            err.style.display = "none";
+            const email = document.getElementById("email").value.trim();
+            const pwd = document.getElementById("password").value;
+
+            if (!email || !pwd){
+              err.textContent = "Por favor, preencha email e password.";
+              err.style.display = "block";
+              return;
+            }
+            if (pwd.length < 3){
+              err.textContent = "Password inválida.";
+              err.style.display = "block";
+              return;
+            }
+            setAuthed(true);
+            renderPortal();
+          });
+
+          return;
+        }
+
+        portalBody.innerHTML = `
+          <div class="portalGrid">
+            <aside class="card sidebar">
+              <h3>Dashboard</h3>
+              <p class="muted">Acesso ao modelo 3D e links do projeto.</p>
+
+              <div class="notice" style="margin-bottom:12px;">
+                Viewer embutido via iframe. Certifique-se de que <b>viewer.html</b> existe no root do repositório.
+              </div>
+
+              <div class="menu">
+                <a href="./viewer.html" target="_blank" rel="noopener">Abrir Viewer (nova aba)</a>
+                <a href="./technical_info.html">Informação técnica</a>
+                                <a href="./client_requirements.html" target="_blank" rel="noopener">Requerimentos do cliente</a>
+<a href="./assets/models/Projeto_Objeto3D_Chat.ifc" download>Download IFC</a>
+                <button id="logoutBtn" type="button">Sair</button>
+              </div>
+
+              <div class="hr"></div>
+              <div class="pill">Dica: no viewer, o cliente pode mudar background, grid e qualidade.</div>
+            </aside>
+
+            <section class="card viewerCard">
+              <iframe class="viewerFrame" src="./viewer.html" title="Heliroma IFC Viewer"></iframe>
+            </section>
+          </div>
+        `;
+
+        document.getElementById("logoutBtn").addEventListener("click", () => {
+          setAuthed(false);
+          renderPortal();
+        });
+      }
+
+      document.getElementById("openPortalBtn").addEventListener("click", openPortal);
+      document.getElementById("openPortalBtn2").addEventListener("click", openPortal);
+      document.getElementById("closePortalBtn").addEventListener("click", closePortal);
+
+      overlay.addEventListener("click", (e) => {
+        if (e.target === overlay) closePortal();
+      });
+      document.addEventListener("keydown", (e) => {
+        if (e.key === "Escape" && overlay.classList.contains("show")) closePortal();
+      });
+    })();
+  </script>
+</body>
+</html>
