@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 1000" role="img" aria-label="Mapa de catálogo (interativo)">
+  <defs>
+    <filter id="glowShadow" x="-30%" y="-30%" width="160%" height="160%">
+      <feDropShadow dx="0" dy="14" stdDeviation="10" flood-color="rgba(0,0,0,0.28)"/>
+      <feDropShadow dx="0" dy="0" stdDeviation="10" flood-color="rgba(22,163,74,0.45)"/>
+    </filter>
+    <style><![CDATA[
+.seg{cursor:pointer; transform-box: fill-box; transform-origin: 50% 50%; transition: transform .18s ease, filter .18s ease;}
+.seg:hover{filter:url(#glowShadow); transform: translateY(-2px) scale(1.01);}
+.seg.active{filter:url(#glowShadow);}
+.ring{pointer-events:none;}
+]]></style>
+    <clipPath id="petalClip1"><path d="M 500.000 165.000 A 335 335 0 0 1 715.334 243.375 L 811.752 128.468 A 485 485 0 0 0 500.000 15.000 Z"/></clipPath>
+    <clipPath id="petalClip2"><path d="M 736.881 263.119 A 335 335 0 0 1 833.725 470.803 L 983.154 457.729 A 485 485 0 0 0 842.947 157.053 Z"/></clipPath>
+    <clipPath id="petalClip3"><path d="M 835.000 500.000 A 335 335 0 0 1 756.625 715.334 L 871.532 811.752 A 485 485 0 0 0 985.000 500.000 Z"/></clipPath>
+    <clipPath id="petalClip4"><path d="M 736.881 736.881 A 335 335 0 0 1 529.197 833.725 L 542.271 983.154 A 485 485 0 0 0 842.947 842.947 Z"/></clipPath>
+    <clipPath id="petalClip5"><path d="M 500.000 835.000 A 335 335 0 0 1 284.666 756.625 L 188.248 871.532 A 485 485 0 0 0 500.000 985.000 Z"/></clipPath>
+    <clipPath id="petalClip6"><path d="M 263.119 736.881 A 335 335 0 0 1 166.275 529.197 L 16.846 542.271 A 485 485 0 0 0 157.053 842.947 Z"/></clipPath>
+    <clipPath id="petalClip7"><path d="M 165.000 500.000 A 335 335 0 0 1 243.375 284.666 L 128.468 188.248 A 485 485 0 0 0 15.000 500.000 Z"/></clipPath>
+    <clipPath id="petalClip8"><path d="M 263.119 263.119 A 335 335 0 0 1 470.803 166.275 L 457.729 16.846 A 485 485 0 0 0 157.053 157.053 Z"/></clipPath>
+  </defs>
+  <rect x="0" y="0" width="1000" height="1000" fill="#ffffff"/>
+  <path class="ring" d="M 500.000 190.000 A 310 310 0 0 1 810.000 500.000 L 835.000 500.000 A 335 335 0 0 0 500.000 165.000 Z" fill="#6FBF7C" opacity="0.95"/>
+  <path class="ring" d="M 810.000 500.000 A 310 310 0 0 1 500.000 810.000 L 500.000 835.000 A 335 335 0 0 0 835.000 500.000 Z" fill="#6FBF7C" opacity="0.95"/>
+  <path class="ring" d="M 500.000 810.000 A 310 310 0 0 1 190.000 500.000 L 165.000 500.000 A 335 335 0 0 0 500.000 835.000 Z" fill="#6FBF7C" opacity="0.95"/>
+  <path class="ring" d="M 190.000 500.000 A 310 310 0 0 1 500.000 190.000 L 500.000 165.000 A 335 335 0 0 0 165.000 500.000 Z" fill="#6FBF7C" opacity="0.95"/>
+  <path class="ring" d="M 500.000 215.000 A 285 285 0 0 1 785.000 500.000 L 810.000 500.000 A 310 310 0 0 0 500.000 190.000 Z" fill="#79C988" opacity="0.95"/>
+  <path class="ring" d="M 785.000 500.000 A 285 285 0 0 1 500.000 785.000 L 500.000 810.000 A 310 310 0 0 0 810.000 500.000 Z" fill="#79C988" opacity="0.95"/>
+  <path class="ring" d="M 500.000 785.000 A 285 285 0 0 1 215.000 500.000 L 190.000 500.000 A 310 310 0 0 0 500.000 810.000 Z" fill="#79C988" opacity="0.95"/>
+  <path class="ring" d="M 215.000 500.000 A 285 285 0 0 1 500.000 215.000 L 500.000 190.000 A 310 310 0 0 0 190.000 500.000 Z" fill="#79C988" opacity="0.95"/>
+  <path class="ring" d="M 500.000 245.000 A 255 255 0 0 1 755.000 500.000 L 785.000 500.000 A 285 285 0 0 0 500.000 215.000 Z" fill="#A7E0B3" opacity="0.95"/>
+  <path class="ring" d="M 755.000 500.000 A 255 255 0 0 1 500.000 755.000 L 500.000 785.000 A 285 285 0 0 0 785.000 500.000 Z" fill="#A7E0B3" opacity="0.95"/>
+  <path class="ring" d="M 500.000 755.000 A 255 255 0 0 1 245.000 500.000 L 215.000 500.000 A 285 285 0 0 0 500.000 785.000 Z" fill="#A7E0B3" opacity="0.95"/>
+  <path class="ring" d="M 245.000 500.000 A 255 255 0 0 1 500.000 245.000 L 500.000 215.000 A 285 285 0 0 0 215.000 500.000 Z" fill="#A7E0B3" opacity="0.95"/>
+  <circle class="ring" cx="500" cy="500" r="251" fill="#ffffff"/>
+  <line class="ring" x1="500" y1="500" x2="751.000" y2="500.000" stroke="rgba(15,23,42,0.12)" stroke-width="2"/>
+  <line class="ring" x1="500" y1="500" x2="677.484" y2="677.484" stroke="rgba(15,23,42,0.12)" stroke-width="2"/>
+  <line class="ring" x1="500" y1="500" x2="500.000" y2="751.000" stroke="rgba(15,23,42,0.12)" stroke-width="2"/>
+  <line class="ring" x1="500" y1="500" x2="322.516" y2="677.484" stroke="rgba(15,23,42,0.12)" stroke-width="2"/>
+  <line class="ring" x1="500" y1="500" x2="249.000" y2="500.000" stroke="rgba(15,23,42,0.12)" stroke-width="2"/>
+  <line class="ring" x1="500" y1="500" x2="322.516" y2="322.516" stroke="rgba(15,23,42,0.12)" stroke-width="2"/>
+  <line class="ring" x1="500" y1="500" x2="500.000" y2="249.000" stroke="rgba(15,23,42,0.12)" stroke-width="2"/>
+  <line class="ring" x1="500" y1="500" x2="677.484" y2="322.516" stroke="rgba(15,23,42,0.12)" stroke-width="2"/>
+  <g class="seg" id="seg1" data-seg="1">
+    <path d="M 500.000 165.000 A 335 335 0 0 1 715.334 243.375 L 811.752 128.468 A 485 485 0 0 0 500.000 15.000 Z" fill="#5DA66C" opacity="0.98"/>
+    <g clip-path="url(#petalClip1)">
+      <rect x="531.938" y="99.028" width="220" height="22" fill="#8A8A8A" opacity="0.96" rx="2" ry="2" transform="rotate(6.800 641.938 110.028)" />
+    </g>
+  </g>
+  <g class="seg" id="seg2" data-seg="2">
+    <path d="M 736.881 263.119 A 335 335 0 0 1 833.725 470.803 L 983.154 457.729 A 485 485 0 0 0 842.947 157.053 Z" fill="#5DA66C" opacity="0.98"/>
+    <g clip-path="url(#petalClip2)">
+      <rect x="766.118" y="313.613" width="220" height="22" fill="#F1F1F1" opacity="0.96" rx="2" ry="2" transform="rotate(-23.000 876.118 324.613)" />
+    </g>
+  </g>
+  <g class="seg" id="seg3" data-seg="3">
+    <path d="M 835.000 500.000 A 335 335 0 0 1 756.625 715.334 L 871.532 811.752 A 485 485 0 0 0 985.000 500.000 Z" fill="#5DA66C" opacity="0.98"/>
+    <g clip-path="url(#petalClip3)">
+      <rect x="779.972" y="630.938" width="220" height="22" fill="#D83A2E" opacity="0.96" rx="2" ry="2" transform="rotate(22.000 889.972 641.938)" />
+    </g>
+  </g>
+  <g class="seg" id="seg4" data-seg="4">
+    <path d="M 736.881 736.881 A 335 335 0 0 1 529.197 833.725 L 542.271 983.154 A 485 485 0 0 0 842.947 842.947 Z" fill="#5DA66C" opacity="0.98"/>
+    <g clip-path="url(#petalClip4)">
+      <rect x="565.387" y="865.118" width="220" height="22" fill="#D83A2E" opacity="0.96" rx="2" ry="2" transform="rotate(67.000 675.387 876.118)" />
+    </g>
+  </g>
+  <g class="seg" id="seg5" data-seg="5">
+    <path d="M 500.000 835.000 A 335 335 0 0 1 284.666 756.625 L 188.248 871.532 A 485 485 0 0 0 500.000 985.000 Z" fill="#5DA66C" opacity="0.98"/>
+    <g clip-path="url(#petalClip5)">
+      <rect x="248.062" y="878.972" width="220" height="22" fill="#2E4FBF" opacity="0.96" rx="2" ry="2" transform="rotate(114.000 358.062 889.972)" />
+    </g>
+  </g>
+  <g class="seg" id="seg6" data-seg="6">
+    <path d="M 263.119 736.881 A 335 335 0 0 1 166.275 529.197 L 16.846 542.271 A 485 485 0 0 0 157.053 842.947 Z" fill="#5DA66C" opacity="0.98"/>
+    <g clip-path="url(#petalClip6)">
+      <rect x="13.882" y="664.387" width="220" height="22" fill="#0B6B3E" opacity="0.96" rx="2" ry="2" transform="rotate(155.000 123.882 675.387)" />
+    </g>
+  </g>
+  <g class="seg" id="seg7" data-seg="7">
+    <path d="M 165.000 500.000 A 335 335 0 0 1 243.375 284.666 L 128.468 188.248 A 485 485 0 0 0 15.000 500.000 Z" fill="#0B0B0B" opacity="0.98"/>
+  </g>
+  <g class="seg" id="seg8" data-seg="8">
+    <path d="M 263.119 263.119 A 335 335 0 0 1 470.803 166.275 L 457.729 16.846 A 485 485 0 0 0 157.053 157.053 Z" fill="#5DA66C" opacity="0.98"/>
+    <g clip-path="url(#petalClip8)">
+      <rect x="214.613" y="112.882" width="220" height="22" fill="#D83A2E" opacity="0.96" rx="2" ry="2" transform="rotate(244.000 324.613 123.882)" />
+    </g>
+  </g>
+  <path class="ring" d="M 710.192 249.503 A 327 327 0 0 1 731.224 268.776 L 848.604 151.396 A 493 493 0 0 0 816.894 122.340 Z" fill="#ffffff" opacity="1"/>
+  <path class="ring" d="M 825.756 471.500 A 327 327 0 0 1 827.000 500.000 L 993.000 500.000 A 493 493 0 0 0 991.124 457.032 Z" fill="#ffffff" opacity="1"/>
+  <path class="ring" d="M 750.497 710.192 A 327 327 0 0 1 731.224 731.224 L 848.604 848.604 A 493 493 0 0 0 877.660 816.894 Z" fill="#ffffff" opacity="1"/>
+  <path class="ring" d="M 528.500 825.756 A 327 327 0 0 1 500.000 827.000 L 500.000 993.000 A 493 493 0 0 0 542.968 991.124 Z" fill="#ffffff" opacity="1"/>
+  <path class="ring" d="M 289.808 750.497 A 327 327 0 0 1 268.776 731.224 L 151.396 848.604 A 493 493 0 0 0 183.106 877.660 Z" fill="#ffffff" opacity="1"/>
+  <path class="ring" d="M 174.244 528.500 A 327 327 0 0 1 173.000 500.000 L 7.000 500.000 A 493 493 0 0 0 8.876 542.968 Z" fill="#ffffff" opacity="1"/>
+  <path class="ring" d="M 249.503 289.808 A 327 327 0 0 1 268.776 268.776 L 151.396 151.396 A 493 493 0 0 0 122.340 183.106 Z" fill="#ffffff" opacity="1"/>
+  <path class="ring" d="M 471.500 174.244 A 327 327 0 0 1 500.000 173.000 L 500.000 7.000 A 493 493 0 0 0 457.032 8.876 Z" fill="#ffffff" opacity="1"/>
+</svg>
