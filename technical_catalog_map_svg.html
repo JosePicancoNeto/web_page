@@ -1,0 +1,540 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>HELIROMA • Product range overview</title>
+  <style>
+    :root{
+      --bg:#eef6f2;
+      --card:#ffffff;
+      --ink:#0b1b14;
+      --muted:#5b6b62;
+      --line:#e6eee9;
+      --brand:#1f7a4a;
+      --shadow: 0 10px 30px rgba(10,30,20,.08);
+      --radius:18px;
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      font-family:system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,"Apple Color Emoji","Segoe UI Emoji";
+      color:var(--ink);
+      background:radial-gradient(1200px 600px at 50% -200px, #ffffff 0%, var(--bg) 60%, #eaf3ee 100%);
+    }
+    a{color:var(--brand); text-decoration:none}
+    .page{
+      min-height:100%;
+      display:flex;
+      flex-direction:column;
+    }
+    .topbar{
+      padding:14px 18px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:16px;
+    }
+    .brand{
+      display:flex;
+      align-items:center;
+      gap:10px;
+      font-weight:800;
+      letter-spacing:.2px;
+    }
+    .pill{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      padding:7px 10px;
+      border:1px solid var(--line);
+      border-radius:999px;
+      background:rgba(255,255,255,.7);
+      color:var(--muted);
+      font-size:12px;
+      white-space:nowrap;
+    }
+    .wrap{
+      width:min(1120px, 100%);
+      margin:0 auto;
+      padding:0 18px 22px;
+      flex:1;
+    }
+    .card{
+      background:var(--card);
+      border:1px solid rgba(230,238,233,.9);
+      border-radius:var(--radius);
+      box-shadow:var(--shadow);
+    }
+    .hero{
+      padding:14px 16px;
+      margin-bottom:12px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+    }
+    .hero h1{
+      font-size:14px;
+      margin:0;
+      font-weight:800;
+      letter-spacing:.2px;
+    }
+    .hero .sub{
+      font-size:12px;
+      color:var(--muted);
+      margin-top:3px;
+    }
+
+    /* GRID: 1 column / 2 rows (map on top, diameters below) */
+    .grid{
+      display:grid;
+      grid-template-columns:1fr;
+      grid-template-rows:auto auto;
+      gap:14px;
+      padding:14px;
+    }
+
+    .mapCard{padding:16px}
+    .mapTitle{
+      margin:0 0 8px;
+      font-size:28px;
+      font-weight:900;
+      letter-spacing:-.6px;
+    }
+    .mapLead{
+      margin:0 0 10px;
+      color:var(--muted);
+      font-size:13px;
+      line-height:1.35;
+    }
+
+    /* Keep both rows visible without vertical scrolling: map scales with viewport */
+    .mapArea{
+      width:100%;
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      padding:10px;
+      border:1px solid var(--line);
+      border-radius:16px;
+      background:linear-gradient(#fff, #fbfdfc);
+      overflow:visible;
+    }
+    .mapFrame{
+      width:min(560px, 100%);
+      aspect-ratio:1 / 1;
+      height:auto;
+      max-height: clamp(280px, 42vh, 520px);
+    }
+    #mapObj{width:100%; height:100%; display:block}
+
+    .note{
+      margin:10px 0 0;
+      font-size:12px;
+      color:var(--muted);
+    }
+
+    .selCard{padding:16px}
+    .selHead{
+      display:flex;
+      align-items:flex-start;
+      justify-content:space-between;
+      gap:12px;
+      margin-bottom:8px;
+    }
+    .selHead h2{margin:0; font-size:14px; font-weight:900}
+    .selHead .status{color:var(--muted); font-size:12px}
+
+    .selName{
+      margin:0;
+      font-size:14px;
+      font-weight:900;
+      letter-spacing:.2px;
+    }
+    .selSpec{
+      margin:2px 0 0;
+      color:var(--muted);
+      font-size:12px;
+    }
+
+    .chips{display:flex; flex-wrap:wrap; gap:6px; margin:10px 0 10px}
+    .chip{
+      display:inline-flex;
+      align-items:center;
+      gap:6px;
+      padding:6px 9px;
+      border:1px solid var(--line);
+      border-radius:999px;
+      background:#f6faf8;
+      color:#2b3a33;
+      font-size:12px;
+      font-weight:700;
+      white-space:nowrap;
+    }
+
+    .tableWrap{
+      border:1px solid var(--line);
+      border-radius:14px;
+      overflow:hidden;
+      background:#fff;
+    }
+    .tableScroll{overflow-x:auto; overflow-y:hidden}
+    table{border-collapse:separate; border-spacing:0; width:100%; min-width:760px}
+    th,td{padding:10px 10px; font-size:12px; border-bottom:1px solid var(--line)}
+    thead th{
+      background:#f2f5f4;
+      color:#26312b;
+      font-weight:900;
+      text-align:center;
+      white-space:nowrap;
+      position:sticky;
+      top:0;
+      z-index:1;
+    }
+    thead th:first-child{text-align:left}
+    tbody td{text-align:center; color:#243029}
+    tbody td:first-child{
+      text-align:left;
+      font-weight:800;
+      background:#fbfdfc;
+      position:sticky;
+      left:0;
+      z-index:1;
+    }
+
+    .legendRow{
+      display:flex;
+      flex-wrap:wrap;
+      gap:14px;
+      align-items:center;
+      margin-top:10px;
+      color:var(--muted);
+      font-size:12px;
+    }
+    .legendItem{display:flex; align-items:center; gap:8px}
+    .dot{
+      width:12px;
+      height:12px;
+      border-radius:999px;
+      border:2px solid #75867d;
+      background:#fff;
+    }
+    .dot.filled{background:#26312b; border-color:#26312b}
+
+    .actions{margin-top:12px; display:flex; gap:10px; flex-wrap:wrap}
+    .btn{
+      appearance:none;
+      border:1px solid var(--line);
+      background:#fff;
+      border-radius:12px;
+      padding:10px 12px;
+      font-weight:900;
+      cursor:pointer;
+      box-shadow:0 4px 14px rgba(10,30,20,.07);
+    }
+    .btn:active{transform:translateY(1px)}
+
+    /* Mobile tightening */
+    @media (max-width: 720px){
+      .wrap{padding:0 12px 18px}
+      .grid{padding:12px}
+      .mapTitle{font-size:22px}
+      .mapFrame{max-height: clamp(260px, 44vh, 420px)}
+      table{min-width:680px}
+    }
+
+    /* Segment highlight look (applied inside the SVG via JS) */
+    .seg-hover{filter: drop-shadow(0 10px 18px rgba(20,90,55,.25)) drop-shadow(0 0 14px rgba(46,235,153,.18));}
+    .seg-selected{filter: drop-shadow(0 14px 22px rgba(15,80,50,.35)) drop-shadow(0 0 18px rgba(46,235,153,.28));}
+  </style>
+</head>
+<body>
+  <div class="page">
+    <div class="topbar">
+      <div class="brand">
+        <span style="display:inline-flex;width:26px;height:26px;border-radius:8px;background:rgba(31,122,74,.12);align-items:center;justify-content:center;color:var(--brand);font-weight:900">H</span>
+        <div>
+          <div style="font-size:13px;font-weight:900">HELIROMA • Product range overview</div>
+          <div style="font-size:12px;color:var(--muted)">Interactive selector (SVG)</div>
+        </div>
+      </div>
+      <div class="pill">Offline • build 2026‑01‑21</div>
+    </div>
+
+    <div class="wrap">
+      <div class="card">
+        <div class="grid">
+
+          <!-- Row 1: Selector -->
+          <section class="mapCard">
+            <h1 class="mapTitle">Product Range Overview — PP‑R Pipes</h1>
+            <p class="mapLead">Passe o mouse (ou toque) sobre cada segmento. Clique para fixar a seleção. “Limpar” para desfazer.</p>
+
+            <div class="mapArea">
+              <div class="mapFrame">
+                <object id="mapObj" type="image/svg+xml" data="mapa_produto_interativo.svg" aria-label="Product range map"></object>
+              </div>
+            </div>
+
+            <p class="note">Nota: para GitHub Pages, o arquivo <b>mapa_produto_interativo.svg</b> deve estar na mesma pasta deste HTML.</p>
+          </section>
+
+          <!-- Row 2: Selection + diameter table -->
+          <section class="selCard" aria-live="polite">
+            <div class="selHead">
+              <div>
+                <h2>Seleção</h2>
+                <div class="status" id="selStatus">Nenhum tubo selecionado</div>
+              </div>
+              <div class="pill" id="selPill">—</div>
+            </div>
+
+            <p class="selName" id="selName">—</p>
+            <p class="selSpec" id="selSpec">Passe o mouse sobre um segmento para ver detalhes e a tabela de diâmetros.</p>
+
+            <div class="chips" id="selChips"></div>
+
+            <div class="tableWrap" role="region" aria-label="Tabela de diâmetros">
+              <div class="tableScroll">
+                <table id="diamTable">
+                  <thead>
+                    <tr>
+                      <th>DIÂMETROS (mm)</th>
+                      <th>20</th><th>25</th><th>32</th><th>40</th><th>50</th><th>63</th><th>75</th><th>90</th><th>110</th><th>125</th><th>160</th><th>200</th><th>250</th><th>315</th><th>355</th><th>400</th>
+                    </tr>
+                  </thead>
+                  <tbody id="diamBody">
+                    <tr>
+                      <td>—</td>
+                      <td colspan="16" style="text-align:left;color:var(--muted)">Selecione um segmento para preencher esta tabela.</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <div class="legendRow" aria-label="Legenda">
+              <div class="legendItem"><span class="dot filled" aria-hidden="true"></span> Produto standard</div>
+              <div class="legendItem"><span class="dot" aria-hidden="true"></span> Disponível sob encomenda</div>
+              <div class="legendItem" style="opacity:.85">— Não aplicável</div>
+            </div>
+
+            <div class="actions">
+              <button class="btn" id="clearBtn" type="button">Limpar seleção</button>
+            </div>
+          </section>
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Diameter columns (mm)
+    const DIAMS = [20,25,32,40,50,63,75,90,110,125,160,200,250,315,355,400];
+
+    // Product catalogue (aligned to the map legend)
+    // NOTE: availability semantics:
+    //   "std" => filled dot (✓)
+    //   "ord" => open dot (○)
+    //   "na"  => blank
+    const PRODUCTS = {
+      // Segment IDs (1..8) must match the SVG's data-seg attributes.
+      1: {
+        name: "ROMAFASER CT",
+        spec: "PP‑RCT 125 + FG • SDR 11 • Ø40–Ø250 • 4 Stripes",
+        chips: ["PP‑RCT 125","FG","SDR 11","Ø40–Ø250","4 Stripes"],
+        diam: {
+          40:"std",50:"std",63:"std",75:"std",90:"std",110:"std",125:"std",160:"std",200:"std",250:"std"
+        }
+      },
+      2: {
+        name: "ROMAKLIMA CT",
+        spec: "PP‑RCT 125 + FG • SDR 17 • Ø125–Ø400 • 4 Stripes",
+        chips: ["PP‑RCT 125","FG","SDR 17","Ø125–Ø400","4 Stripes"],
+        diam: {
+          125:"std",160:"std",200:"std",250:"std",315:"std",355:"std",400:"std"
+        }
+      },
+      3: {
+        name: "HELISYSTEM",
+        spec: "PP‑R 100 • SDR 6 • Ø20–Ø110 • 1 Stripe",
+        chips: ["PP‑R 100","SDR 6","Ø20–Ø110","1 Stripe"],
+        diam: {
+          20:"std",25:"std",32:"std",40:"std",50:"std",63:"std",75:"std",90:"std",110:"std"
+        }
+      },
+      4: {
+        name: "HELISYSTEM",
+        spec: "PP‑R 100 • SDR 7,4 • Ø20–Ø110 • 1 Stripe",
+        chips: ["PP‑R 100","SDR 7,4","Ø20–Ø110","1 Stripe"],
+        diam: {
+          20:"std",25:"std",32:"std",40:"std",50:"std",63:"std",75:"std",90:"std",110:"std",125:"ord",160:"ord"
+        }
+      },
+      5: {
+        name: "ROMAFASER",
+        spec: "PP‑R 100 + FG • SDR 7,4 • Ø20–Ø110 • 4 Stripes",
+        chips: ["PP‑R 100","FG","SDR 7,4","Ø20–Ø110","4 Stripes"],
+        diam: {
+          20:"std",25:"std",32:"std",40:"std",50:"std",63:"std",75:"std",90:"std",110:"std",125:"ord",160:"ord",200:"ord",250:"ord"
+        }
+      },
+      6: {
+        name: "ROMAKLIMA",
+        spec: "PP‑R 100 + FG • SDR 11 • Ø32–Ø160 • 4 Stripes",
+        chips: ["PP‑R 100","FG","SDR 11","Ø32–Ø160","4 Stripes"],
+        diam: {
+          32:"std",40:"std",50:"std",63:"std",75:"std",90:"std",110:"std",125:"ord",160:"ord",200:"ord",250:"ord",315:"ord",355:"ord",400:"ord"
+        }
+      },
+      7: {
+        name: "ROMAFASER Anti‑UV",
+        spec: "PP‑R 100 + FG • SDR 7,4 • Ø20–Ø75",
+        chips: ["Anti‑UV","PP‑R 100","FG","SDR 7,4","Ø20–Ø75"],
+        diam: {
+          20:"std",25:"std",32:"std",40:"std",50:"std",63:"std",75:"std"
+        }
+      },
+      8: {
+        name: "ROMAFASER CT +",
+        spec: "PP‑RCT 125 + FG • SDR 9 • Ø32–Ø250 • 4 Stripes",
+        chips: ["PP‑RCT 125","FG","SDR 9","Ø32–Ø250","4 Stripes"],
+        diam: {
+          32:"std",40:"std",50:"std",63:"std",75:"std",90:"std",110:"std",125:"ord",160:"ord",200:"ord",250:"ord"
+        }
+      }
+    };
+
+    const selStatus = document.getElementById('selStatus');
+    const selPill = document.getElementById('selPill');
+    const selName = document.getElementById('selName');
+    const selSpec = document.getElementById('selSpec');
+    const selChips = document.getElementById('selChips');
+    const diamBody = document.getElementById('diamBody');
+    const clearBtn = document.getElementById('clearBtn');
+
+    let pinnedSeg = null;
+    let svgRoot = null;
+    let segGroups = [];
+
+    function tdSymbol(v){
+      if(v === 'std') return '✓';
+      if(v === 'ord') return '○';
+      return '';
+    }
+
+    function fillTable(product){
+      diamBody.innerHTML = '';
+      const tr = document.createElement('tr');
+      const nameCell = document.createElement('td');
+      nameCell.textContent = product.name;
+      tr.appendChild(nameCell);
+      for(const d of DIAMS){
+        const td = document.createElement('td');
+        const v = product.diam?.[d];
+        td.textContent = tdSymbol(v);
+        tr.appendChild(td);
+      }
+      diamBody.appendChild(tr);
+    }
+
+    function setChips(arr){
+      selChips.innerHTML = '';
+      (arr || []).forEach(t => {
+        const s = document.createElement('span');
+        s.className = 'chip';
+        s.textContent = t;
+        selChips.appendChild(s);
+      });
+    }
+
+    function setSelection(segId, isPinned=false){
+      if(!segId || !PRODUCTS[segId]){
+        selStatus.textContent = 'Nenhum tubo selecionado';
+        selPill.textContent = '—';
+        selName.textContent = '—';
+        selSpec.textContent = 'Passe o mouse sobre um segmento para ver detalhes e a tabela de diâmetros.';
+        setChips([]);
+        diamBody.innerHTML = `<tr><td>—</td><td colspan="16" style="text-align:left;color:var(--muted)">Selecione um segmento para preencher esta tabela.</td></tr>`;
+        return;
+      }
+      const p = PRODUCTS[segId];
+      selStatus.textContent = isPinned ? 'Selecionado' : 'Pré‑visualização';
+      selPill.textContent = `Segmento ${segId}`;
+      selName.textContent = p.name;
+      selSpec.textContent = p.spec;
+      setChips(p.chips);
+      fillTable(p);
+    }
+
+    function clearHighlights(){
+      segGroups.forEach(g => {
+        g.classList.remove('seg-hover');
+        g.classList.remove('seg-selected');
+      });
+    }
+
+    function highlight(segId, mode){
+      if(!segId) return;
+      const g = segGroups.find(x => x.dataset.seg === String(segId));
+      if(!g) return;
+      if(mode === 'hover') g.classList.add('seg-hover');
+      if(mode === 'selected') g.classList.add('seg-selected');
+    }
+
+    function bindSvg(){
+      const obj = document.getElementById('mapObj');
+      const doc = obj.contentDocument;
+      if(!doc) return;
+      svgRoot = doc.documentElement;
+      segGroups = Array.from(doc.querySelectorAll('g.seg'));
+
+      // Add pointer cursor & tap friendliness
+      segGroups.forEach(g => {
+        g.style.cursor = 'pointer';
+        g.style.transition = 'filter 180ms ease';
+
+        // Improve hit area: allow pointer on full segment group
+        g.addEventListener('pointerenter', () => {
+          if(pinnedSeg) return;
+          clearHighlights();
+          highlight(g.dataset.seg, 'hover');
+          setSelection(Number(g.dataset.seg), false);
+        });
+
+        g.addEventListener('pointerleave', () => {
+          if(pinnedSeg) return;
+          clearHighlights();
+          setSelection(null);
+        });
+
+        g.addEventListener('click', (ev) => {
+          ev.preventDefault();
+          const id = Number(g.dataset.seg);
+          pinnedSeg = id;
+          clearHighlights();
+          highlight(id, 'selected');
+          setSelection(id, true);
+        });
+
+        // Mobile tap: treat as click
+        g.addEventListener('touchstart', () => {}, {passive:true});
+      });
+
+      // Start empty state
+      setSelection(null);
+    }
+
+    clearBtn.addEventListener('click', () => {
+      pinnedSeg = null;
+      clearHighlights();
+      setSelection(null);
+    });
+
+    document.getElementById('mapObj').addEventListener('load', bindSvg);
+  </script>
+</body>
+</html>
