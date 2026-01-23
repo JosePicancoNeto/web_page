@@ -45,7 +45,7 @@
   <g class="seg" id="seg1" data-seg="1">
     <path d="M 500.000 165.000 A 335 335 0 0 1 715.334 243.375 L 811.752 128.468 A 485 485 0 0 0 500.000 15.000 Z" fill="#5DA66C" opacity="0.98"/>
     <g clip-path="url(#petalClip1)">
-      <rect x="531.938" y="99.028" width="220" height="22" fill="#8A8A8A" opacity="0.96" rx="2" ry="2" transform="rotate(6.800 641.938 110.028)" />
+      <rect x="531.938" y="99.028" width="220" height="22" fill="#8A8A8A" opacity="0.96" rx="2" ry="2" transform="rotate(110 641.938 110.028)" />
     </g>
   </g>
   <g class="seg" id="seg2" data-seg="2">
